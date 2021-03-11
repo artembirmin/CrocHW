@@ -1,16 +1,19 @@
-package com.company.pojo;
+package ru.artembirmin.pojo;
+
+import ru.artembirmin.dto.Cleaning;
 
 import java.util.Arrays;
 
 /**
- * Сотрудник
+ * Вольер
  */
-public class Employee {
-    private final String name;
+public class Aviary {
+    private final String number;
     private Animal[] animals = new Animal[0];
+    private Cleaning[] cleanings = new Cleaning[0];
 
-    public Employee(String name) {
-        this.name = name;
+    public Aviary(String number) {
+        this.number = number;
     }
 
     /**
@@ -21,6 +24,16 @@ public class Employee {
     public void addAnimal(Animal animal) {
         animals = Arrays.copyOf(animals, animals.length + 1);
         animals[animals.length - 1] = animal;
+    }
+
+    /**
+     * Добавление записи об уборке
+     *
+     * @param cleaning Добавляемая запись
+     */
+    public void addCleaning(Cleaning cleaning) {
+        cleanings = Arrays.copyOf(cleanings, cleanings.length + 1);
+        cleanings[cleanings.length - 1] = cleaning;
     }
 
     /**
@@ -41,10 +54,15 @@ public class Employee {
         animals = newAnimals;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
     @Override
     public String toString() {
-        return "Employee{" +
-                "name='" + name + '\'' +
+        return "Aviary{" +
+                "number='" + number + '\'' +
+                ", cleanings=" + Arrays.toString(cleanings) +
                 '}';
     }
 }

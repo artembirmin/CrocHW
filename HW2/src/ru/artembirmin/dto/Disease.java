@@ -1,4 +1,4 @@
-package com.company.dto;
+package ru.artembirmin.dto;
 
 /**
  * Запись о болезни

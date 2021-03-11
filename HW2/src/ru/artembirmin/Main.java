@@ -1,12 +1,12 @@
-package com.company;
+package ru.artembirmin;
 
-import com.company.dto.Cleaning;
-import com.company.dto.Disease;
-import com.company.dto.Feeding;
-import com.company.pojo.Animal;
-import com.company.pojo.Aviary;
-import com.company.pojo.Employee;
-import com.company.pojo.Zoo;
+import ru.artembirmin.dto.Cleaning;
+import ru.artembirmin.dto.Disease;
+import ru.artembirmin.dto.Feeding;
+import ru.artembirmin.pojo.Animal;
+import ru.artembirmin.pojo.Aviary;
+import ru.artembirmin.pojo.Employee;
+import ru.artembirmin.pojo.Zoo;
 
 public class Main {
 

@@ -1,7 +1,7 @@
-package com.company.pojo;
+package ru.artembirmin.pojo;
 
-import com.company.dto.Disease;
-import com.company.dto.Feeding;
+import ru.artembirmin.dto.Disease;
+import ru.artembirmin.dto.Feeding;
 
 import java.util.Arrays;
 
