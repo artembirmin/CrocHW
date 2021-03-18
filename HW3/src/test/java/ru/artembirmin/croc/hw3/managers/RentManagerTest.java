@@ -32,14 +32,19 @@ class RentManagerTest {
 
     @Test
     void toRent() {
+        //Сдали в аренду
         assertTrue(rentManager.toRent(bike));
         assertTrue(rentManager.toRent(car));
         assertTrue(rentManager.toRent(plain));
-
+        //Сняли с аренды
+        rentManager.takeOfRent(bike);
+        rentManager.takeOfRent(car);
+        rentManager.takeOfRent(plain);
+        //Сломали
         bike.breakDown();
         car.breakDown();
         plain.breakDown();
-
+        //Пытаемся снова сдать
         assertFalse(rentManager.toRent(bike));
         assertFalse(rentManager.toRent(car));
         assertFalse(rentManager.toRent(plain));
@@ -47,10 +52,15 @@ class RentManagerTest {
 
     @Test
     void isRent() {
+        //По умолчанию транспорт не в арнеде
+        assertFalse(rentManager.isRent(bike));
+        assertFalse(rentManager.isRent(car));
+        assertFalse(rentManager.isRent(plain));
+        //Сдали в аренду
         rentManager.toRent(bike);
         rentManager.toRent(car);
         rentManager.toRent(plain);
-
+        //Должен быть в аренде
         assertTrue(rentManager.isRent(bike));
         assertTrue(rentManager.isRent(car));
         assertTrue(rentManager.isRent(plain));
@@ -59,14 +69,15 @@ class RentManagerTest {
 
     @Test
     void takeOfRent() {
+        //Сдали в арнеду
         rentManager.toRent(bike);
         rentManager.toRent(car);
         rentManager.toRent(plain);
-
+        //Сняли с аренды
         rentManager.takeOfRent(bike);
         rentManager.takeOfRent(car);
         rentManager.takeOfRent(plain);
-
+        //Не должн быть в аренде
         assertFalse(rentManager.isRent(bike));
         assertFalse(rentManager.isRent(car));
         assertFalse(rentManager.isRent(plain));

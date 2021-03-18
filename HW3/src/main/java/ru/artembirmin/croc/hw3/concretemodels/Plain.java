@@ -2,11 +2,18 @@ package ru.artembirmin.croc.hw3.concretemodels;
 
 import ru.artembirmin.croc.hw3.abstractmodels.Aircraft;
 
+/**
+ * Самолет.
+ */
 public class Plain extends Aircraft {
 
 
-    public Plain(int serialNumber, String manufacturer, String model, int seatsCount, String productionYear, int maxFlightAltitude, int maxSpeed) {
-        super(serialNumber, manufacturer, model, seatsCount, productionYear, maxFlightAltitude, maxSpeed);
+    public Plain(int serialNumber, String manufacturer, String model,
+                 int seatsCount, String productionYear, int maxFlightAltitude,
+                 int maxSpeed) {
+        super(serialNumber, manufacturer, model,
+                seatsCount, productionYear, maxFlightAltitude,
+                maxSpeed);
     }
 
 

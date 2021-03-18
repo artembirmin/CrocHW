@@ -1,21 +1,33 @@
 package ru.artembirmin.croc.hw3.abstractmodels;
 
-public abstract class Aircraft extends RentableVehicle implements CanFly {
+/**
+ * Воздушное транспортное стредство.
+ */
+public abstract class Aircraft extends RentableRepairableVehicle implements CanFly {
 
     /**
-     * In meters
+     * Максимальная высота полета в метрах.
      */
     protected int maxFlightAltitude;
+    /**
+     * Максимаьная скорость.
+     */
     protected int maxSpeed;
+    /**
+     * Может ли летать.
+     */
     protected boolean canFly = true;
 
     public Aircraft(int serialNumber, String manufacturer, String model,
-                    int seatsCount, String productionYear, int maxFlightAltitude, int maxSpeed) {
-        super(serialNumber, manufacturer, model, seatsCount, productionYear);
+                    int seatsCount, String productionYear, int maxFlightAltitude,
+                    int maxSpeed) {
+        super(serialNumber, manufacturer, model,
+                seatsCount, productionYear);
         this.maxFlightAltitude = maxFlightAltitude;
         this.maxSpeed = maxSpeed;
     }
 
+    @Override
     public boolean canFly() {
         return canFly;
     }

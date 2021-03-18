@@ -1,10 +1,33 @@
 package ru.artembirmin.croc.hw3.abstractmodels;
 
+/**
+ * Транспортное средство (транспорт).
+ */
 public abstract class Vehicle {
+
+    /**
+     * Серийный номер.
+     */
     protected int serialNumber;
+
+    /**
+     * Производитель.
+     */
     protected String manufacturer;
+
+    /**
+     * Модель.
+     */
     protected String model;
+
+    /**
+     * Год/Дата производства.
+     */
     protected String productionYear;
+
+    /**
+     * Количество сидячих мест.
+     */
     protected int seatsCount;
 
     public Vehicle(int serialNumber, String manufacturer, String model,

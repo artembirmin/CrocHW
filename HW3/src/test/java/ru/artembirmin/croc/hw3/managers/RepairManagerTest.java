@@ -13,7 +13,7 @@ class RepairManagerTest {
     private Bike bike;
     private Car car;
     private Plain plain;
-    RepairManager repairManager;
+    private RepairManager repairManager;
 
     @BeforeEach
     void setUp() {
@@ -30,18 +30,23 @@ class RepairManagerTest {
 
     @Test
     void repair() {
+        //По умолчанию транспорт в рабочем состоянии
+        assertTrue(bike.isServiceability());
+        assertTrue(car.isServiceability());
+        assertTrue(plain.isServiceability());
+        //Сломали
         bike.breakDown();
         car.breakDown();
         plain.breakDown();
-
+        //Транспорт должен быть не в рабочем состоянии
         assertFalse(bike.isServiceability());
         assertFalse(car.isServiceability());
         assertFalse(plain.isServiceability());
-
+        //Почининили
         repairManager.repair(bike);
         repairManager.repair(car);
         repairManager.repair(plain);
-
+        //Транспорт должен быть в рабочем состоянии
         assertTrue(bike.isServiceability());
         assertTrue(car.isServiceability());
         assertTrue(plain.isServiceability());
