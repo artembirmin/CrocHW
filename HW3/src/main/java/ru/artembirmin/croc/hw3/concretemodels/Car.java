@@ -7,6 +7,17 @@ import ru.artembirmin.croc.hw3.abstractmodels.ICEVehicle;
  */
 public class Car extends ICEVehicle {
 
+    /**
+     * @param serialNumber    Серийный номер.
+     * @param manufacturer    Производитель.
+     * @param model           Модель.
+     * @param seatsCount      Количество мест для размещения людей.
+     * @param productionYear  Год/Дата производства.
+     * @param wheelsCount     Количество колес.
+     * @param horsepower      Количество лошадиных сил.
+     * @param maxSpeed        Максимальная скорсть.
+     * @param fuelConsumption Расход топлива.
+     */
     public Car(int serialNumber, String manufacturer, String model,
                int seatsCount, String productionYear, int wheelsCount,
                int horsepower, int maxSpeed, int fuelConsumption) {

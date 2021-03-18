@@ -26,7 +26,7 @@ public abstract class Vehicle {
     protected String productionYear;
 
     /**
-     * Количество сидячих мест.
+     * Количество мест для размещения людей.
      */
     protected int seatsCount;
 

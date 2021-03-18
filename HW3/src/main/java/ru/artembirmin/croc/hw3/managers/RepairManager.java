@@ -17,14 +17,29 @@ public class RepairManager {
     private final PersonalMobilityVehicleRepairStation personalMobilityVehicleRepairStation =
             new PersonalMobilityVehicleRepairStation();
 
+    /**
+     * Ремонтирует воздушый транспорт.
+     *
+     * @param aircraft транспорт, требующий ремонта.
+     */
     public void repair(Aircraft aircraft) {
         aircraftRepairStation.repair(aircraft);
     }
 
+    /**
+     * Ремонтирует транспорт индивидуальной мобильности.
+     *
+     * @param vehicle транспорт, требующий ремонта.
+     */
     public void repair(PersonalMobilityVehicle vehicle) {
         personalMobilityVehicleRepairStation.repair(vehicle);
     }
 
+    /**
+     * Ремонтирует транспорт с двигателем внутреннего сгорания.
+     *
+     * @param vehicle транспорт, требующий ремонта.
+     */
     public void repair(ICEVehicle vehicle) {
         iceVehicleRepairStation.repair(vehicle);
     }

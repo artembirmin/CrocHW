@@ -7,7 +7,15 @@ import ru.artembirmin.croc.hw3.abstractmodels.PersonalMobilityVehicle;
  */
 public class Scooter extends PersonalMobilityVehicle {
 
-
+    /**
+     * @param serialNumber   Серийный номер.
+     * @param manufacturer   Производитель.
+     * @param model          Модель.
+     * @param seatsCount     Количество мест для размещения людей.
+     * @param productionYear Год/Дата производства.
+     * @param wheelsCount    Количество колес.
+     * @param weight         Вес.
+     */
     public Scooter(int serialNumber, String manufacturer, String model,
                    int seatsCount, String productionYear, int wheelsCount,
                    int weight) {
