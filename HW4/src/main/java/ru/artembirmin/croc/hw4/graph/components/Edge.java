@@ -17,8 +17,8 @@ public class Edge<V> {
      * Для добавления ребра в граф не достаточно создать ребро.
      * Необходимо использовать метод {@link Graph#addEdge(Edge)}.
      *
-     * @param vertex1 Вершина.
-     * @param vertex2 Вершина.
+     * @param vertex1 Первая вершина
+     * @param vertex2 Вторая вершина
      */
     public Edge(Vertex<V> vertex1, Vertex<V> vertex2) {
         this.vertex1 = vertex1;
@@ -33,7 +33,10 @@ public class Edge<V> {
         return vertex2;
     }
 
-    public void clear(){
+    /**
+     * Удаляет ребро из вершин и вершины из ребра.
+     */
+    public void clear() {
         vertex1.deleteEdge(this);
         vertex2.deleteEdge(this);
         vertex1 = null;
