@@ -68,7 +68,7 @@ public class CommandTest {
         try {
             actualTaskList = taskService.readAllTasks();
         } catch (IOException | ClassNotFoundException e) {
-            assertDoesNotThrow((Executable) e);
+            e.printStackTrace();
         }
         assertEquals(expectedTaskList, actualTaskList);
     }
@@ -91,6 +91,9 @@ public class CommandTest {
         taskMetadataConsoleReader.setId(2);
         assertTrue(new DeleteTask("2", "del").execute(taskService, taskMetadataConsoleReader));
 
+        taskMetadataConsoleReader.setId(543);
+        assertFalse(new DeleteTask("2", "del").execute(taskService, taskMetadataConsoleReader));
+
         checkAllTasks(Arrays.asList(
                 new Task(0, "1", "111", executor, Status.NOTSTARTED),
                 new Task(1, "2", "222", executor, Status.COMPLETED),
@@ -108,6 +111,9 @@ public class CommandTest {
         taskMetadataConsoleReader.setName("4edit");
         taskMetadataConsoleReader.setDescription("444edit");
         assertTrue(new EditTask("3", "edit").execute(taskService, taskMetadataConsoleReader));
+
+        taskMetadataConsoleReader.setId(543);
+        assertFalse(new EditTask("3", "edit").execute(taskService, taskMetadataConsoleReader));
 
         checkAllTasks(Arrays.asList(
                 new Task(0, "1", "111", executor, Status.NOTSTARTED),
