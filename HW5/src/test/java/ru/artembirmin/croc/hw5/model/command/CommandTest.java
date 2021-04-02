@@ -3,7 +3,6 @@ package ru.artembirmin.croc.hw5.model.command;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import ru.artembirmin.croc.hw5.model.Executor;
 import ru.artembirmin.croc.hw5.model.Status;
 import ru.artembirmin.croc.hw5.model.Task;
@@ -76,6 +75,12 @@ public class CommandTest {
     @Test
     public void addCommandTest() {
         initTasks();
+        taskService.changeFile(new File("Blabla"));
+        taskMetadataConsoleReader.setName("6");
+        taskMetadataConsoleReader.setDescription("5555");
+        taskMetadataConsoleReader.setStatus(Status.COMPLETED);
+        assertFalse(new AddTask("1", "add").execute(taskService, taskMetadataConsoleReader));
+        taskService.changeFile(file);
         checkAllTasks(Arrays.asList(
                 new Task(0, "1", "111", executor, Status.NOTSTARTED),
                 new Task(1, "2", "222", executor, Status.COMPLETED),
@@ -94,6 +99,11 @@ public class CommandTest {
         taskMetadataConsoleReader.setId(543);
         assertFalse(new DeleteTask("2", "del").execute(taskService, taskMetadataConsoleReader));
 
+        taskService.changeFile(new File("DFDF"));
+        taskMetadataConsoleReader.setId(1);
+        assertFalse(new DeleteTask("2", "del").execute(taskService, taskMetadataConsoleReader));
+        taskService.changeFile(file);
+
         checkAllTasks(Arrays.asList(
                 new Task(0, "1", "111", executor, Status.NOTSTARTED),
                 new Task(1, "2", "222", executor, Status.COMPLETED),
@@ -107,13 +117,18 @@ public class CommandTest {
     public void editCommandTest() {
         initTasks();
         taskMetadataConsoleReader.setId(3);
-        taskMetadataConsoleReader.setFieldNumberForEditCombination("1","2", "ex");
+        taskMetadataConsoleReader.setFieldNumberForEditCombination("1", "2", "ex");
         taskMetadataConsoleReader.setName("4edit");
         taskMetadataConsoleReader.setDescription("444edit");
         assertTrue(new EditTask("3", "edit").execute(taskService, taskMetadataConsoleReader));
 
         taskMetadataConsoleReader.setId(543);
         assertFalse(new EditTask("3", "edit").execute(taskService, taskMetadataConsoleReader));
+
+        taskService.changeFile(new File("DFDF"));
+        taskMetadataConsoleReader.setId(1);
+        assertFalse(new EditTask("3", "edit").execute(taskService, taskMetadataConsoleReader));
+        taskService.changeFile(file);
 
         checkAllTasks(Arrays.asList(
                 new Task(0, "1", "111", executor, Status.NOTSTARTED),
