@@ -3,6 +3,8 @@ package ru.artembirmin.croc.hw5;
 import ru.artembirmin.croc.hw5.menu.Menu;
 import ru.artembirmin.croc.hw5.model.Executor;
 import ru.artembirmin.croc.hw5.model.command.*;
+import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
+import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReaderImpl;
 import ru.artembirmin.croc.hw5.service.TaskService;
 
 import java.io.File;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.prefs.Preferences;
 
 
 public class App {
@@ -20,13 +23,15 @@ public class App {
         commands.add(new EditTask("2", "edit task"));
         commands.add(new DeleteTask("3", "delete task"));
         commands.add(new PrintAllTasks("4", "print tasks"));
-        commands.add(new SaveAndExit("5", "exit"));
+        commands.add(new ClearTasks("5", "clear tasks"));
+        commands.add(new SaveAndExit("6", "exit"));
         Menu menu = new Menu();
         Scanner scanner = new Scanner(System.in);
 
         String mainMenu = menu.createMainMenu(commands);
         Executor executor = new Executor("artembirmin", "Artem", "Petrosyan");
-        TaskService taskService = new TaskService(executor, new File("D:\\tasks2.txt"));
+        TaskService taskService = new TaskService(executor, new File("D:\\tasks1.txt"));
+        TaskMetadataConsoleReader taskMetadataConsoleReader = new TaskMetadataConsoleReaderImpl();
 
         while (true) {
             System.out.println(mainMenu);
@@ -34,7 +39,8 @@ public class App {
             Boolean isExecuted = null;
             for (Command command : commands) {
                 if (command.getCode().equals(commandCode)) {
-                    isExecuted = command.execute(taskService);
+                    isExecuted = command.execute(taskService, taskMetadataConsoleReader);
+
                 }
             }
             if (isExecuted == null) {
@@ -44,6 +50,7 @@ public class App {
             } else {
                 System.out.println("Success");
             }
+
         }
 
     }

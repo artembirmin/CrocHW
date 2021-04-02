@@ -1,5 +1,6 @@
 package ru.artembirmin.croc.hw5.model.command;
 
+import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
 import ru.artembirmin.croc.hw5.service.TaskService;
 
 /**
@@ -28,9 +29,10 @@ public abstract class Command {
      * Выполняет операцию.
      *
      * @param taskService сервис для работы с задачами
+     * @param consoleReader считывает данные из консоли
      * @return {@code true}, если операция выполнена успешно
      */
-    public abstract boolean execute(TaskService taskService);
+    public abstract boolean execute(TaskService taskService, TaskMetadataConsoleReader consoleReader);
 
     public String getCode() {
         return code;

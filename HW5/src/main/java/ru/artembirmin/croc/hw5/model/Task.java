@@ -104,6 +104,6 @@ public class Task implements Serializable {
                 "\tname - " + name + '\n' +
                 "\tdescription - " + description + '\n' +
                 "\texecutor : \n" + executor +
-                "\tstatus - " + status;
+                "\tstatus - " + status + '\n';
     }
 }

@@ -19,9 +19,8 @@ public class EditTask extends Command {
     }
 
     @Override
-    public boolean execute(TaskService taskService) {
-        TaskMetadataConsoleReader metadataConsoleReader = taskService.getTaskMetadataConsoleReader();
-        long id = taskService.getTaskMetadataConsoleReader().readId();
+    public boolean execute(TaskService taskService, TaskMetadataConsoleReader consoleReader) {
+        long id = consoleReader.readId();
         String field;
         while (true) {
             Task task = taskService.findById(id);
@@ -29,10 +28,10 @@ public class EditTask extends Command {
                 System.out.println("Не верный id.");
                 return false;
             }
-            field = metadataConsoleReader.readFieldNumberForEdit();
+            field = consoleReader.readFieldNumberForEdit();
             switch (field) {
                 case "1": {
-                    String newName = metadataConsoleReader.readName();
+                    String newName = consoleReader.readName();
                     task.setName(newName);
                     if (!taskService.replaceTask(task, id)) {
                         System.out.println("Замена не удалась");
@@ -40,13 +39,13 @@ public class EditTask extends Command {
                     break;
                 }
                 case "2": {
-                    String newDescription = metadataConsoleReader.readDescription();
+                    String newDescription = consoleReader.readDescription();
                     task.setDescription(newDescription);
                     taskService.replaceTask(task, id);
                     break;
                 }
                 case "3": {
-                    Status newStatus = metadataConsoleReader.readStatus();
+                    Status newStatus = consoleReader.readStatus();
                     task.setStatus(newStatus);
                     taskService.replaceTask(task, id);
                     break;

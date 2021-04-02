@@ -1,5 +1,6 @@
 package ru.artembirmin.croc.hw5.model.command;
 
+import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
 import ru.artembirmin.croc.hw5.service.TaskService;
 
 /**
@@ -16,8 +17,8 @@ public class DeleteTask extends Command {
     }
 
     @Override
-    public boolean execute(TaskService taskService) {
-        long id = taskService.getTaskMetadataConsoleReader().readId();
+    public boolean execute(TaskService taskService, TaskMetadataConsoleReader consoleReader) {
+        long id = consoleReader.readId();
         return taskService.remove(id);
     }
 }

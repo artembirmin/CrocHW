@@ -6,6 +6,7 @@ import ru.artembirmin.croc.hw5.model.Task;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 /**
  * Производит базовые операции над файлом задач.
@@ -21,10 +22,6 @@ public class TaskService {
      */
     private final TaskFileReader taskFileReader = new TaskFileReader();
     /**
-     * Считывает метаданные задач из консоли.
-     */
-    private TaskMetadataConsoleReader taskMetadataConsoleReader = new TaskMetadataConsoleReaderImpl();
-    /**
      * Текущий файл с задачами.
      */
     private File currentFile;
@@ -32,27 +29,20 @@ public class TaskService {
      * Текущий исполнитель задач.
      */
     private Executor executor;
+    /**
+     * Последний идентификатор, который был у задачи
+     */
+    private long lastId = 0;
 
     /**
      * @param executor    текущий исполнтель задач
      * @param currentFile текущий файл с задачами
      */
     public TaskService(Executor executor, File currentFile) {
+        Preferences preferences = Preferences.userNodeForPackage(TaskService.class);
+        lastId = preferences.getLong("lastId",0);
         this.executor = executor;
         this.currentFile = currentFile;
-    }
-
-    /**
-     * Вспомогательный конструктор для тестирования.
-     *
-     * @param executor                  текущий исполнтель задач
-     * @param currentFile               текущий файл с задачами
-     * @param taskMetadataConsoleReader считыватель метаданных задач из консоли.
-     */
-    public TaskService(Executor executor, File currentFile, TaskMetadataConsoleReader taskMetadataConsoleReader) {
-        this.executor = executor;
-        this.currentFile = currentFile;
-        this.taskMetadataConsoleReader = taskMetadataConsoleReader;
     }
 
     /**
@@ -158,10 +148,6 @@ public class TaskService {
         return taskFileReader.findById(currentFile, id);
     }
 
-    public TaskMetadataConsoleReader getTaskMetadataConsoleReader() {
-        return taskMetadataConsoleReader;
-    }
-
     /**
      * //TODO🎂
      * Берет id последнего элемента и добавляет 1.
@@ -169,11 +155,21 @@ public class TaskService {
      * @return
      */
     public long generateId() {
-        return (long) (Math.random() * 1000);
+
+        return lastId++;
     }
 
     public Executor getExecutor() {
         return executor;
     }
 
+    public void save() {
+        Preferences preferences = Preferences.userNodeForPackage(TaskService.class);
+        preferences.putLong("lastId",lastId);
+    }
+
+    public boolean clear() {
+        lastId = 0;
+        return taskFileWriter.clear(currentFile);
+    }
 }

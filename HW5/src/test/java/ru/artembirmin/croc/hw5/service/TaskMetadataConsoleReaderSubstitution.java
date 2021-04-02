@@ -1,20 +1,39 @@
-package ru.artembirmin.croc.hw5;
+package ru.artembirmin.croc.hw5.service;
 
 import ru.artembirmin.croc.hw5.model.Status;
-import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
 
 /**
  * Реаизация {@link TaskMetadataConsoleReader} для тестирования.
  */
 public class TaskMetadataConsoleReaderSubstitution implements TaskMetadataConsoleReader {
 
-    private String name;
-    private String description;
-    private Status status;
+    /**
+     * Идентификатор.
+     */
     private long id;
+    /**
+     * Название.
+     */
+    private String name;
+    /**
+     * Описание.
+     */
+    private String description;
+    /**
+     * Статус.
+     */
+    private Status status;
 
+    /**
+     * Комбинация номеров полей при редактировании задачи.
+     */
     private String[] fieldNumberForEditCombination;
-    private int fieldPosition;
+    /**
+     * Номер номера поля.
+     */
+    private int fieldPosition = 0;
+
+
 
     public void setName(String name) {
         this.name = name;
@@ -22,7 +41,6 @@ public class TaskMetadataConsoleReaderSubstitution implements TaskMetadataConsol
 
     @Override
     public String readName() {
-        System.out.println(name);
         return name;
     }
 
@@ -32,7 +50,6 @@ public class TaskMetadataConsoleReaderSubstitution implements TaskMetadataConsol
 
     @Override
     public String readDescription() {
-        System.out.println(description);
         return description;
     }
 
@@ -42,7 +59,6 @@ public class TaskMetadataConsoleReaderSubstitution implements TaskMetadataConsol
 
     @Override
     public Status readStatus() {
-        System.out.println(status);
         return status;
     }
 
@@ -52,7 +68,6 @@ public class TaskMetadataConsoleReaderSubstitution implements TaskMetadataConsol
 
     @Override
     public long readId() {
-        System.out.println(id);
         return id;
     }
 
@@ -62,7 +77,6 @@ public class TaskMetadataConsoleReaderSubstitution implements TaskMetadataConsol
 
     @Override
     public String readFieldNumberForEdit() {
-        System.out.println(fieldNumberForEditCombination[fieldPosition++]);
         return fieldNumberForEditCombination[fieldPosition++];
     }
 }

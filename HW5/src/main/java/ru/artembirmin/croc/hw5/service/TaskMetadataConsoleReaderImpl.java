@@ -1,5 +1,6 @@
 package ru.artembirmin.croc.hw5.service;
 
+import ru.artembirmin.croc.hw5.App;
 import ru.artembirmin.croc.hw5.menu.Menu;
 import ru.artembirmin.croc.hw5.model.Status;
 
@@ -25,23 +26,35 @@ public class TaskMetadataConsoleReaderImpl implements TaskMetadataConsoleReader 
      */
     private final Menu menu = new Menu();
 
+    /**
+     * Флаг вызова {@link TaskMetadataConsoleReaderImpl#readName()}.
+     * Если вызовов еще не было, то {@code true}.
+     * Используется для костыля, ибо во время второго и последующих запусков после
+     * ввода оставался enter от предыдущего запуска. Его считывал сканнер и ввод названия пропускался.
+     * Исправить это в {@link App} не получилось.
+     */
+    private boolean isFirstReadNameLaunch = true;
+
     public TaskMetadataConsoleReaderImpl() {
         statusesMap = createStatusesMap();
     }
 
     @Override
     public String readName() {
+        if(!isFirstReadNameLaunch){
+            scanner.nextLine();
+        }
+        isFirstReadNameLaunch = false;
         System.out.println("Input task's name: ");
         return scanner.nextLine();
     }
 
-
     @Override
     public String readDescription() {
+
         System.out.println("Input task's description: ");
         return scanner.nextLine();
     }
-
 
     @Override
     public Status readStatus() {
