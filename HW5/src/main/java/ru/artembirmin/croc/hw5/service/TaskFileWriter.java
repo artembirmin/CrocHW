@@ -19,12 +19,8 @@ public class TaskFileWriter {
      * @param file очищаемый файл
      * @return {@code true}, если файл найден и очищен
      */
-    public boolean clear(File file) {
-        try {
-            new FileOutputStream(file).close();
-        } catch (IOException e) {
-            return false;
-        }
+    public boolean clear(File file) throws IOException {
+        new FileOutputStream(file).close();
         return true;
     }
 
@@ -35,15 +31,13 @@ public class TaskFileWriter {
      * @param tasks вставляемый список задач
      * @return {@code true}, если файл найден и все задачи вставлены
      */
-    public boolean setTasks(File file, List<Task> tasks) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(file);
-             ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream)) {
-            for (Task task : tasks) {
-                outputStream.writeObject(task);
-            }
-        } catch (IOException e) {
-            return false;
+    public boolean setTasks(File file, List<Task> tasks) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+        for (Task task : tasks) {
+            outputStream.writeObject(task);
         }
+        outputStream.close();
         return true;
     }
 }

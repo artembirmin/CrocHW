@@ -3,6 +3,8 @@ package ru.artembirmin.croc.hw5.model.command;
 import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
 import ru.artembirmin.croc.hw5.service.TaskService;
 
+import java.io.IOException;
+
 public class ClearTasks extends Command {
     /**
      * @param code          код
@@ -14,6 +16,11 @@ public class ClearTasks extends Command {
 
     @Override
     public boolean execute(TaskService taskService, TaskMetadataConsoleReader consoleReader) {
-        return taskService.clear();
+        try {
+            return taskService.clear();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

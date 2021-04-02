@@ -2,8 +2,11 @@ package ru.artembirmin.croc.hw5.model.command;
 
 import ru.artembirmin.croc.hw5.model.Status;
 import ru.artembirmin.croc.hw5.model.Task;
+import ru.artembirmin.croc.hw5.model.exceptions.TaskNotFoundException;
 import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
 import ru.artembirmin.croc.hw5.service.TaskService;
+
+import java.io.IOException;
 
 /**
  * Команда редактирования задачи.
@@ -23,7 +26,12 @@ public class EditTask extends Command {
         long id = consoleReader.readId();
         String field;
         while (true) {
-            Task task = taskService.findById(id);
+            Task task = null;
+            try {
+                task = taskService.findById(id);
+            } catch (IOException | ClassNotFoundException | TaskNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
             if (task == null) {
                 System.out.println("Не верный id.");
                 return false;
@@ -33,27 +41,39 @@ public class EditTask extends Command {
                 case "1": {
                     String newName = consoleReader.readName();
                     task.setName(newName);
-                    if (!taskService.replaceTask(task, id)) {
-                        System.out.println("Замена не удалась");
+                    try {
+                        taskService.replaceTask(task, id);
+                    } catch (IOException | ClassNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        return false;
                     }
                     break;
                 }
                 case "2": {
                     String newDescription = consoleReader.readDescription();
                     task.setDescription(newDescription);
-                    taskService.replaceTask(task, id);
+                    try {
+                        taskService.replaceTask(task, id);
+                    } catch (IOException | ClassNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        return false;
+                    }
                     break;
                 }
                 case "3": {
                     Status newStatus = consoleReader.readStatus();
                     task.setStatus(newStatus);
-                    taskService.replaceTask(task, id);
+                    try {
+                        taskService.replaceTask(task, id);
+                    } catch (IOException | ClassNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        return false;
+                    }
                     break;
                 }
                 default:
                     return true;
             }
         }
-        //return true;
     }
 }

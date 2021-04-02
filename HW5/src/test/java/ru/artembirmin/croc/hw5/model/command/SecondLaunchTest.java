@@ -1,7 +1,5 @@
 package ru.artembirmin.croc.hw5.model.command;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import ru.artembirmin.croc.hw5.model.Executor;
@@ -17,24 +15,20 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CommandTest {
+/**
+ * Тест сохранения id при выполнении команд в последовательные запуски программы.
+ * Запускать каждый метод отдельно в ручную.
+ * FirstLaunchTest всегда серый. Результат покажет второй
+ */
+public class SecondLaunchTest {
+
     TaskMetadataConsoleReaderSubstitution taskMetadataConsoleReader = new TaskMetadataConsoleReaderSubstitution();
-    File file = new File("D:\\tasks.txt");
+    File file = new File("D:\\tasks1.txt");
     Executor executor = new Executor("artembirmin", "Artem", "Petrosyan");
     TaskService taskService = new TaskService(
             executor,
             file
     );
-
-    @BeforeEach
-    void setUp() throws IOException {
-        taskService.clear();
-    }
-
-    @AfterEach
-    void tearDown() throws IOException {
-        taskService.clear();
-    }
 
     private void initTasks() {
         taskMetadataConsoleReader.setName("1");
@@ -74,19 +68,39 @@ public class CommandTest {
     }
 
     @Test
-    public void addCommandTest() {
+    public void addCommandFirstLaunchTest() throws IOException {
+        taskService.clear();
         initTasks();
         checkAllTasks(Arrays.asList(
                 new Task(0, "1", "111", executor, Status.NOTSTARTED),
                 new Task(1, "2", "222", executor, Status.COMPLETED),
                 new Task(2, "3", "333", executor, Status.NOSTATUS),
                 new Task(3, "4", "444", executor, Status.INPROGRESS),
-                new Task(4, "5", "555", executor, Status.COMPLETED)));
-
+                new Task(4, "5", "555", executor, Status.COMPLETED)
+        ));
+        new SaveAndExit("1","ex").execute(taskService,taskMetadataConsoleReader);
     }
 
     @Test
-    public void deleteCommandTest() {
+    public void addCommandSecondLaunchTest() {
+        initTasks();
+        checkAllTasks(Arrays.asList(
+                new Task(0, "1", "111", executor, Status.NOTSTARTED),
+                new Task(1, "2", "222", executor, Status.COMPLETED),
+                new Task(2, "3", "333", executor, Status.NOSTATUS),
+                new Task(3, "4", "444", executor, Status.INPROGRESS),
+                new Task(4, "5", "555", executor, Status.COMPLETED),
+                new Task(5, "1", "111", executor, Status.NOTSTARTED),
+                new Task(6, "2", "222", executor, Status.COMPLETED),
+                new Task(7, "3", "333", executor, Status.NOSTATUS),
+                new Task(8, "4", "444", executor, Status.INPROGRESS),
+                new Task(9, "5", "555", executor, Status.COMPLETED)
+        ));
+    }
+
+    @Test
+    public void deleteCommandFirstLaunchTest() throws IOException {
+        taskService.clear();
         initTasks();
         taskMetadataConsoleReader.setId(2);
         assertTrue(new DeleteTask("2", "del").execute(taskService, taskMetadataConsoleReader));
@@ -98,22 +112,22 @@ public class CommandTest {
                 new Task(4, "5", "555", executor, Status.COMPLETED)
         ));
 
+        new SaveAndExit("1","ex").execute(taskService,taskMetadataConsoleReader);
     }
 
     @Test
-    public void editCommandTest() {
+    public void deleteCommandSecondLaunchTest() {
         initTasks();
-        taskMetadataConsoleReader.setId(3);
-        taskMetadataConsoleReader.setFieldNumberForEditCombination("1","2", "ex");
-        taskMetadataConsoleReader.setName("4edit");
-        taskMetadataConsoleReader.setDescription("444edit");
-        assertTrue(new EditTask("3", "edit").execute(taskService, taskMetadataConsoleReader));
-
         checkAllTasks(Arrays.asList(
                 new Task(0, "1", "111", executor, Status.NOTSTARTED),
                 new Task(1, "2", "222", executor, Status.COMPLETED),
-                new Task(2, "3", "333", executor, Status.NOSTATUS),
-                new Task(3, "4edit", "444edit", executor, Status.INPROGRESS),
-                new Task(4, "5", "555", executor, Status.COMPLETED)));
+                new Task(3, "4", "444", executor, Status.INPROGRESS),
+                new Task(4, "5", "555", executor, Status.COMPLETED),
+                new Task(5, "1", "111", executor, Status.NOTSTARTED),
+                new Task(6, "2", "222", executor, Status.COMPLETED),
+                new Task(7, "3", "333", executor, Status.NOSTATUS),
+                new Task(8, "4", "444", executor, Status.INPROGRESS),
+                new Task(9, "5", "555", executor, Status.COMPLETED)
+        ));
     }
 }

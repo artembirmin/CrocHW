@@ -4,6 +4,8 @@ import ru.artembirmin.croc.hw5.model.Task;
 import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
 import ru.artembirmin.croc.hw5.service.TaskService;
 
+import java.io.IOException;
+
 /**
  * Команда добавления задачи.
  */
@@ -19,12 +21,17 @@ public class AddTask extends Command {
 
     @Override
     public boolean execute(TaskService taskService, TaskMetadataConsoleReader consoleReader) {
-        return taskService.appendTask(new Task(
-                taskService.generateId(),
-                consoleReader.readName(),
-                consoleReader.readDescription(),
-                taskService.getExecutor(),
-                consoleReader.readStatus()
-        ));
+        try {
+            return taskService.appendTask(new Task(
+                    taskService.generateId(),
+                    consoleReader.readName(),
+                    consoleReader.readDescription(),
+                    taskService.getExecutor(),
+                    consoleReader.readStatus()
+            ));
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

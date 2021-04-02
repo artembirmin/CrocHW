@@ -2,8 +2,10 @@ package ru.artembirmin.croc.hw5.service;
 
 import ru.artembirmin.croc.hw5.model.Executor;
 import ru.artembirmin.croc.hw5.model.Task;
+import ru.artembirmin.croc.hw5.model.exceptions.TaskNotFoundException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.prefs.Preferences;
@@ -30,7 +32,7 @@ public class TaskService {
      */
     private Executor executor;
     /**
-     * Последний идентификатор, который был у задачи
+     * Идентификатор последней задачи. Производится сквозная нумерация всех задач.
      */
     private long lastId = 0;
 
@@ -40,7 +42,7 @@ public class TaskService {
      */
     public TaskService(Executor executor, File currentFile) {
         Preferences preferences = Preferences.userNodeForPackage(TaskService.class);
-        lastId = preferences.getLong("lastId",0);
+        lastId = preferences.getLong("lastId", 0);
         this.executor = executor;
         this.currentFile = currentFile;
     }
@@ -68,8 +70,10 @@ public class TaskService {
      *
      * @param task добавляемая задача.
      * @return {@code true}, если задача добавлена
+     * @throws IOException            если файл не найден или какие-то доругие проблемы с файлом
+     * @throws ClassNotFoundException в файле другой объект
      */
-    public boolean appendTask(Task task) {
+    public boolean appendTask(Task task) throws IOException, ClassNotFoundException {
         List<Task> tasks = taskFileReader.readAllTasksFromFile(currentFile);
         taskFileWriter.clear(currentFile);
         tasks.add(task);
@@ -82,8 +86,10 @@ public class TaskService {
      * @param newTask новая задача
      * @param id      идентификатор задачи, на место которой встанет новая
      * @return {@code true}, если задача с таким id найдена в файле
+     * @throws IOException            если файл не найден или какие-то доругие проблемы с файлом
+     * @throws ClassNotFoundException в файле другой объект
      */
-    public boolean replaceTask(Task newTask, long id) {
+    public boolean replaceTask(Task newTask, long id) throws IOException, ClassNotFoundException {
         List<Task> tasks = taskFileReader.readAllTasksFromFile(currentFile);
         taskFileWriter.clear(currentFile);
         Iterator<Task> taskIterator = tasks.iterator();
@@ -107,13 +113,12 @@ public class TaskService {
      *
      * @param id идентификатор
      * @return {@code true}, если задача с таким id найдена с удалена
+     * @throws IOException            если файл не найден или какие-то доругие проблемы с файлом
+     * @throws ClassNotFoundException в файле другой объект
+     * @throws TaskNotFoundException  задача не найдена в файле
      */
-    public boolean remove(long id) {
+    public boolean remove(long id) throws IOException, ClassNotFoundException, TaskNotFoundException {
         List<Task> tasks = taskFileReader.readAllTasksFromFile(currentFile);
-        // Если файл не найден или в файле другой тип данных.
-        if (tasks == null) {
-            return false;
-        }
         for (Task task : tasks) {
             // Ищем задачу по заданному id.
             if (task.getId() == id) {
@@ -126,15 +131,17 @@ public class TaskService {
             }
         }
         // Если задача по такому id не найдена.
-        return false;
+        throw new TaskNotFoundException("Task not found");
     }
 
     /**
      * Читает и возвращает все задачи из {@link TaskService#currentFile}
      *
      * @return список всех задач, если файл найден и чтение завершилось без ошибок, иначе null
+     * @throws IOException            если файл не найден или какие-то доругие проблемы с файлом
+     * @throws ClassNotFoundException в файле другой объект
      */
-    public List<Task> readAllTasks() {
+    public List<Task> readAllTasks() throws IOException, ClassNotFoundException {
         return taskFileReader.readAllTasksFromFile(currentFile);
     }
 
@@ -143,19 +150,20 @@ public class TaskService {
      *
      * @param id идентификатор, по которому производится поиск
      * @return найденная задача или {@code null}, если задача с таким id не найдена
+     * @throws IOException            если файл не найден или какие-то доругие проблемы с файлом
+     * @throws ClassNotFoundException в файле другой объект
+     * @throws TaskNotFoundException  задача не найдена в файле
      */
-    public Task findById(long id) {
+    public Task findById(long id) throws IOException, ClassNotFoundException, TaskNotFoundException {
         return taskFileReader.findById(currentFile, id);
     }
 
     /**
-     * //TODO🎂
      * Берет id последнего элемента и добавляет 1.
      *
-     * @return
+     * @return id для нового элемента
      */
     public long generateId() {
-
         return lastId++;
     }
 
@@ -163,12 +171,15 @@ public class TaskService {
         return executor;
     }
 
+    /**
+     * Сохданяет данные, необходимые для последующей работы.
+     */
     public void save() {
         Preferences preferences = Preferences.userNodeForPackage(TaskService.class);
-        preferences.putLong("lastId",lastId);
+        preferences.putLong("lastId", lastId);
     }
 
-    public boolean clear() {
+    public boolean clear() throws IOException {
         lastId = 0;
         return taskFileWriter.clear(currentFile);
     }

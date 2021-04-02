@@ -4,6 +4,7 @@ import ru.artembirmin.croc.hw5.model.Task;
 import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
 import ru.artembirmin.croc.hw5.service.TaskService;
 
+import java.io.IOException;
 import java.util.List;
 
 public class PrintAllTasks extends Command {
@@ -17,7 +18,13 @@ public class PrintAllTasks extends Command {
 
     @Override
     public boolean execute(TaskService taskService, TaskMetadataConsoleReader consoleReader) {
-        List<Task> tasks = taskService.readAllTasks();
+        List<Task> tasks = null;
+        try {
+            tasks = taskService.readAllTasks();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
         if (tasks == null) {
             return false;
         }

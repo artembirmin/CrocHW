@@ -41,7 +41,7 @@ public class TaskMetadataConsoleReaderImpl implements TaskMetadataConsoleReader 
 
     @Override
     public String readName() {
-        if(!isFirstReadNameLaunch){
+        if (!isFirstReadNameLaunch) {
             scanner.nextLine();
         }
         isFirstReadNameLaunch = false;

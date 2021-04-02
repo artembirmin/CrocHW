@@ -3,6 +3,8 @@ package ru.artembirmin.croc.hw5.model.command;
 import ru.artembirmin.croc.hw5.service.TaskMetadataConsoleReader;
 import ru.artembirmin.croc.hw5.service.TaskService;
 
+import java.io.IOException;
+
 /**
  * Команды для проведения операций над задачами.
  */
@@ -28,11 +30,11 @@ public abstract class Command {
     /**
      * Выполняет операцию.
      *
-     * @param taskService сервис для работы с задачами
+     * @param taskService   сервис для работы с задачами
      * @param consoleReader считывает данные из консоли
      * @return {@code true}, если операция выполнена успешно
      */
-    public abstract boolean execute(TaskService taskService, TaskMetadataConsoleReader consoleReader);
+    public abstract boolean execute(TaskService taskService, TaskMetadataConsoleReader consoleReader) throws IOException, ClassNotFoundException;
 
     public String getCode() {
         return code;
