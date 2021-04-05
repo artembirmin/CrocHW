@@ -23,9 +23,9 @@ public class JaxbConverter {
     /**
      * Десериализация из xml.
      *
-     * @param xml xml
+     * @param xml  xml
      * @param type тип объекта
-     * @param <T> тип
+     * @param <T>  тип
      * @return объект
      */
     public <T> T fromXml(String xml, Class<T> type) throws IOException {
@@ -34,6 +34,7 @@ public class JaxbConverter {
 
     /**
      * Создаём настроенный mapper JAXB.
+     *
      * @return mapper
      */
     private XmlMapper createXmlMapper() {

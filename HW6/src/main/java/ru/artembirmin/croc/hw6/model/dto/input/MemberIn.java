@@ -2,7 +2,6 @@ package ru.artembirmin.croc.hw6.model.dto.input;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-
 import java.util.Objects;
 
 @XmlRootElement

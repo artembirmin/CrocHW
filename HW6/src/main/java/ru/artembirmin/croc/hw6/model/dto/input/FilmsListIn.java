@@ -26,14 +26,6 @@ public class FilmsListIn {
         this.films = films;
     }
 
-    public List<FilmIn> getFilmIns() {
-        return films;
-    }
-
-    public void setFilmIns(List<FilmIn> films) {
-        this.films = films;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

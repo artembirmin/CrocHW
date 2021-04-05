@@ -14,8 +14,8 @@ public class Zoo {
     private String title;
     @XmlElement(name = "Управляющий")
     private String manager;
-        @XmlElementWrapper(name = "Животные")
-        @XmlElement(name = "Животное")
+    @XmlElementWrapper(name = "Животные")
+    @XmlElement(name = "Животное")
     private List<Animal> animals = new ArrayList<>();
 
 
@@ -30,12 +30,12 @@ public class Zoo {
         this.title = title;
     }
 
-    public void setManager(String manager) {
-        this.manager = manager;
-    }
-
     public String getManager() {
         return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
     }
 
     public List<Animal> getAnimals() {

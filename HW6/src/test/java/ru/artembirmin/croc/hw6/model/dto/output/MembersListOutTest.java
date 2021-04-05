@@ -23,6 +23,11 @@ class MembersListOutTest {
                                         Arrays.asList(
                                                 new MembersFunction("Сценарист"),
                                                 new MembersFunction("Режессер")
+                                        )),
+                                new FilmOut("Фильм 2",
+                                        Arrays.asList(
+                                                new MembersFunction("Сценарист"),
+                                                new MembersFunction("Режессер")
                                         ))
                         )),
                 new MemberOut(
@@ -34,12 +39,11 @@ class MembersListOutTest {
                                         ))
                         ))
         ));
-        
 
         final JaxbConverter converter = new JaxbConverter();
         final String xml = converter.toXml(membersListOut);
         System.out.println(xml);
 
-        //assertEquals(membersListOut, converter.fromXml(xml, MembersListOut.class));
+        assertEquals(membersListOut, converter.fromXml(xml, MembersListOut.class));
     }
 }
