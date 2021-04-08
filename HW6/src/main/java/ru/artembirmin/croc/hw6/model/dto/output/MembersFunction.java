@@ -3,16 +3,25 @@ package ru.artembirmin.croc.hw6.model.dto.output;
 import javax.xml.bind.annotation.XmlAttribute;
 import java.util.Objects;
 
+/**
+ * Функция участника фильма, поступающего на выход
+ */
 public class MembersFunction {
 
+    /**
+     * Описание функции.
+     */
     @XmlAttribute(name = "name")
     private String function;
 
-    public MembersFunction(String function) {
-        this.function = function;
+    public MembersFunction() {
     }
 
-    public MembersFunction() {
+    /**
+     * @param function описание функции
+     */
+    public MembersFunction(String function) {
+        this.function = function;
     }
 
     public String getFunction() {

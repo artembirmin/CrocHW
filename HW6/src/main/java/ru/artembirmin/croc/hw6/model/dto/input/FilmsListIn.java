@@ -5,15 +5,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Класс-обертка для списка фильмов поступающих на вход.
+ * Входные данные.
+ */
 @XmlRootElement(name = "films")
 public class FilmsListIn {
 
+    /**
+     * Список фильмов.
+     */
     @XmlElement(name = "film")
     private List<FilmIn> films;
 
     public FilmsListIn() {
     }
 
+    /**
+     * Добавляет фильм.
+     *
+     * @param film добавляемый фильм.
+     */
     public void addFilm(FilmIn film) {
         films.add(film);
     }
@@ -24,6 +36,13 @@ public class FilmsListIn {
 
     public void setFilms(List<FilmIn> films) {
         this.films = films;
+    }
+
+    @Override
+    public String toString() {
+        return "FilmsListIn{" +
+                "films=" + films +
+                '}';
     }
 
     @Override

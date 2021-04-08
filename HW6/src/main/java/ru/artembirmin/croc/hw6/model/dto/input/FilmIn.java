@@ -1,18 +1,36 @@
 package ru.artembirmin.croc.hw6.model.dto.input;
 
+import ru.artembirmin.croc.hw6.model.dto.output.MembersFunction;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Модель фильма, поступающего на вход.
+ */
 public class FilmIn {
+    /**
+     * Название фильма.
+     */
     private String title;
+    /**
+     * Описание фильма.
+     */
     private String description;
 
+    /**
+     * Список сценаристов фильма.
+     */
     @XmlElementWrapper(name = "screenwriters")
     @XmlElement(name = "screenwriter")
     private List<MemberIn> screenwriters;
 
+    /**
+     * Список режиссеров фильма.
+     */
     @XmlElementWrapper(name = "directors")
     @XmlElement(name = "director")
     private List<MemberIn> directors;
@@ -20,11 +38,21 @@ public class FilmIn {
     public FilmIn() {
     }
 
+    /**
+     * @param title название фильма
+     * @param description описание фильма
+     * @param screenwriters список сценаристов фильма
+     * @param directors список режиссеров фильма
+     */
     public FilmIn(String title, String description, List<MemberIn> screenwriters, List<MemberIn> directors) {
         this.title = title;
         this.description = description;
         this.screenwriters = screenwriters;
         this.directors = directors;
+    }
+
+    public List<String> getAllFunctionsRu(){
+        return Arrays.asList("Сценарист", "Режиссер");
     }
 
     public String getDescription() {
@@ -57,6 +85,16 @@ public class FilmIn {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "\nFilmIn{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", screenwriters=" + screenwriters +
+                ", directors=" + directors +
+                '}';
     }
 
     @Override

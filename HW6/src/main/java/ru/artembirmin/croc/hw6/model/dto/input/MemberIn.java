@@ -4,14 +4,23 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 
+/**
+ * Участник фильма поступающего на выход.
+ */
 @XmlRootElement
 public class MemberIn {
+    /**
+     * Имя участника.
+     */
     @XmlAttribute
     private String name;
 
     public MemberIn() {
     }
 
+    /**
+     * @param name имя участника
+     */
     public MemberIn(String name) {
         this.name = name;
     }
@@ -24,6 +33,12 @@ public class MemberIn {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "MemberIn{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -5,15 +5,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Класс-обертка списка участников фильмов, поступающих на выход.
+ * Выходные данные.
+ */
 @XmlRootElement(name = "people")
 public class MembersListOut {
 
+    /**
+     * Список участников.
+     */
     @XmlElement(name = "person")
     private List<MemberOut> members;
 
     public MembersListOut() {
     }
 
+    /**
+     * @param members список участников
+     */
     public MembersListOut(List<MemberOut> members) {
         this.members = members;
     }
