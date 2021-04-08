@@ -11,6 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 
 class FilmsListInTest {
+    /**
+     * Тестирует конвертацию входных данных.
+     *
+     * @throws Exception исключение из конвертера
+     */
     @Test
     public void testConvertFilmsToXml() throws Exception {
 

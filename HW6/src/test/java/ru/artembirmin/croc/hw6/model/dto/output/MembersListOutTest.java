@@ -1,9 +1,6 @@
 package ru.artembirmin.croc.hw6.model.dto.output;
 
 import org.junit.jupiter.api.Test;
-import ru.artembirmin.croc.hw6.model.dto.input.FilmIn;
-import ru.artembirmin.croc.hw6.model.dto.input.FilmsListIn;
-import ru.artembirmin.croc.hw6.model.dto.input.MemberIn;
 import ru.artembirmin.croc.hw6.service.JaxbConverter;
 
 import java.util.Arrays;
@@ -11,9 +8,13 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MembersListOutTest {
+    /**
+     * Тестирует конвертацию вызодных данных.
+     *
+     * @throws Exception исключение из конвертера
+     */
     @Test
     public void testConvertMembersToXml() throws Exception {
-
         MembersListOut membersListOut = new MembersListOut();
         membersListOut.setMembers(Arrays.asList(
                 new MemberOut(
