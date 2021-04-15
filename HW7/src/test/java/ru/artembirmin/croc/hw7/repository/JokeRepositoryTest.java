@@ -88,8 +88,8 @@ class JokeRepositoryTest {
         jokeRepository.deleteAll();
         jokeRepository.createNewAll(new ArrayList<>(Arrays.asList(
                 new Joke("— О, великий вождь Орлиный Глаз! Скажи, почему у всех в нашем племени два имени," +
-                                " а у меня только одно?\n" +
-                                "— Тебе лучше не знать этого, Моржовый.",
+                        " а у меня только одно?\n" +
+                        "— Тебе лучше не знать этого, Моржовый.",
                         25,
                         true,
                         LocalDate.now(),
@@ -100,20 +100,20 @@ class JokeRepositoryTest {
                         LocalDate.now(),
                         "https://anekdotovstreet.com/"),
                 new Joke("Цыган сдает экзамен по вождению.\n" +
-                                "Инспектор:\n" +
-                                "— Какой знак видите?\n" +
-                                "Цыган:\n" +
-                                "— Алюминиевый.",
+                        "Инспектор:\n" +
+                        "— Какой знак видите?\n" +
+                        "Цыган:\n" +
+                        "— Алюминиевый.",
                         11,
                         true,
                         LocalDate.now(),
                         "https://anekdotovstreet.com/"),
                 new Joke("— Кто твоя мать, рядовой Петров?\n" +
-                                "— Коммунистическая партия Советского Союза!\n" +
-                                "— Кто твой отец?\n" +
-                                "— Вы, товарищ командир!\n" +
-                                "— Какова твоя заветная мечта?\n" +
-                                "— Сиротой бы остаться…",
+                        "— Коммунистическая партия Советского Союза!\n" +
+                        "— Кто твой отец?\n" +
+                        "— Вы, товарищ командир!\n" +
+                        "— Какова твоя заветная мечта?\n" +
+                        "— Сиротой бы остаться…",
                         22,
                         true,
                         LocalDate.now(),
@@ -129,10 +129,10 @@ class JokeRepositoryTest {
                         LocalDate.now(),
                         "unknown"),
                 new Joke("Приходит улитка в бар. Бармен говорит:\n" +
-                                "— Ты че тут делаешь?\n" +
-                                "Взял ее и выкинул.\n" +
-                                "Приходит улитка через неделю в бар:\n" +
-                                "— Ты зачем меня выкину?",
+                        "— Ты че тут делаешь?\n" +
+                        "Взял ее и выкинул.\n" +
+                        "Приходит улитка через неделю в бар:\n" +
+                        "— Ты зачем меня выкину?",
                         24,
                         true,
                         LocalDate.now(),
@@ -199,7 +199,7 @@ class JokeRepositoryTest {
                 2,
                 true,
                 LocalDate.now(),
-                "https://anekdotovstreet.com/istoricheskie/");
+                "https://anekdotovstreet.com/");
         jokeRepository.createNew(joke);
         expectedJokes.add(joke);
         assertEquals(expectedJokes, jokeRepository.findAll());
@@ -212,17 +212,17 @@ class JokeRepositoryTest {
                         2,
                         true,
                         LocalDate.now(),
-                        "https://anekdotovstreet.com/istoricheskie/"),
+                        "https://anekdotovstreet.com/"),
                 new Joke("888 888",
                         2,
                         true,
                         LocalDate.now(),
-                        "https://anekdotovstreet.com/istoricheskie/"),
+                        "https://anekdotovstreet.com/"),
                 new Joke("999 999",
                         2,
                         true,
                         LocalDate.now(),
-                        "https://anekdotovstreet.com/istoricheskie/")
+                        "https://anekdotovstreet.com/")
         ));
         jokeRepository.createNewAll(jokes);
         expectedJokes.addAll(jokes);

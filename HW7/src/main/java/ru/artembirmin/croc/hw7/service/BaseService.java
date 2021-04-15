@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface BaseService<T> {
 
-
     /**
      * Поиск объекта по заданному id.
      *
@@ -66,7 +65,6 @@ public interface BaseService<T> {
      * @return добавленный объект
      */
     Joke createNew(T obj);
-
 
     /**
      * Добавялет все переданные объекты.

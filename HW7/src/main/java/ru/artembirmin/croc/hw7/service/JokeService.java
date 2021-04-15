@@ -6,8 +6,15 @@ import ru.artembirmin.croc.hw7.repository.JokeRepository;
 import java.util.List;
 
 public class JokeService implements BaseService<Joke> {
+
+    /**
+     * Репозиторий.
+     */
     private final JokeRepository repository;
 
+    /**
+     * @param jokeRepository репозиторий
+     */
     public JokeService(JokeRepository jokeRepository) {
         repository = jokeRepository;
     }
@@ -24,12 +31,18 @@ public class JokeService implements BaseService<Joke> {
 
     @Override
     public Joke save(Joke joke) {
+        if (joke.getWordsCount() == 0) {
+            joke.setWordsCount(countNumberOfWords(joke.getText()));
+        }
         return repository.save(joke);
     }
 
     @Override
     public List<Joke> saveAll(List<Joke> jokes) {
-        return repository.saveAll(jokes);
+        for (Joke joke : jokes) {
+            save(joke);
+        }
+        return jokes;
     }
 
     @Override
@@ -50,21 +63,9 @@ public class JokeService implements BaseService<Joke> {
     @Override
     public Joke createNew(Joke joke) {
         if (joke.getWordsCount() == 0) {
-            joke.setWordsCount(findWordsCount(joke.getText()));
+            joke.setWordsCount(countNumberOfWords(joke.getText()));
         }
         return repository.createNew(joke);
-    }
-
-    private int findWordsCount(String str) {
-        int count = 0;
-        String[] strings = str.split("\\s|\\n ");
-        for (String string : strings) {
-            if ((Character.isLetterOrDigit(string.charAt(0))
-                    || (string.length() > 1 && Character.isLetterOrDigit(string.charAt(1))))) {
-                count++;
-            }
-        }
-        return count;
     }
 
     @Override
@@ -73,5 +74,23 @@ public class JokeService implements BaseService<Joke> {
             createNew(joke);
         }
         return jokes;
+    }
+
+    /**
+     * Подсчитывает количество слов в тексте.
+     *
+     * @param text текст, в котором ведется подсчет слов
+     * @return количество слов
+     */
+    private int countNumberOfWords(String text) {
+        int count = 0;
+        String[] words = text.split("\\s|\\n ");
+        for (String word : words) {
+            if ((Character.isLetterOrDigit(word.charAt(0))
+                    || (word.length() > 1 && Character.isLetterOrDigit(word.charAt(1))))) {
+                count++;
+            }
+        }
+        return count;
     }
 }

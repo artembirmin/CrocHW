@@ -10,7 +10,7 @@ public class Joke {
     /**
      * Идентификатор.
      */
-    private Integer id;
+    private Integer id = -1;
     /**
      * Текст шутки.
      */
@@ -33,12 +33,12 @@ public class Joke {
     private String source;
 
     /**
-     * @param id идентификатор
-     * @param text текст шутки
-     * @param wordsCount количество слов
-     * @param isFunny смешная ли
+     * @param id           идентификатор
+     * @param text         текст шутки
+     * @param wordsCount   количество слов
+     * @param isFunny      смешная ли
      * @param creationDate дата осздания
-     * @param source ресурс
+     * @param source       ресурс
      */
     public Joke(int id, String text, int wordsCount, boolean isFunny, LocalDate creationDate, String source) {
         this.id = id;
@@ -48,12 +48,13 @@ public class Joke {
         this.creationDate = creationDate;
         this.source = source;
     }
+
     /**
-     * @param text текст шутки
-     * @param wordsCount количество слов
-     * @param isFunny смешная ли
+     * @param text         текст шутки
+     * @param wordsCount   количество слов
+     * @param isFunny      смешная ли
      * @param creationDate дата осздания
-     * @param source ресурс
+     * @param source       ресурс
      */
     public Joke(String text, int wordsCount, boolean isFunny, LocalDate creationDate, String source) {
         this.text = text;
@@ -62,11 +63,12 @@ public class Joke {
         this.creationDate = creationDate;
         this.source = source;
     }
+
     /**
-     * @param text текст шутки
-     * @param isFunny смешная ли
+     * @param text         текст шутки
+     * @param isFunny      смешная ли
      * @param creationDate дата осздания
-     * @param source ресурс
+     * @param source       ресурс
      */
     public Joke(String text, Boolean isFunny, LocalDate creationDate, String source) {
         this.text = text;
@@ -81,6 +83,7 @@ public class Joke {
 
     /**
      * Изменяет текст шуткию. При зименении текста количество слов обнуляется.
+     *
      * @param text новый текст
      */
     public void setText(String text) {

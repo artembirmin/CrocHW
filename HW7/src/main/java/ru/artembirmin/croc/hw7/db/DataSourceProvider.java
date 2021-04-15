@@ -1,4 +1,5 @@
 package ru.artembirmin.croc.hw7.db;
+
 import org.apache.derby.jdbc.EmbeddedDataSource;
 
 import java.io.IOException;
@@ -12,14 +13,13 @@ import java.util.Properties;
 public class DataSourceProvider {
 
     /**
-     * Data source.
-     */
-    private EmbeddedDataSource dataSource;
-
-    /**
      * Параметры конфигурации.
      */
     private final Map<String, String> properties = new HashMap<>();
+    /**
+     * Data source.
+     */
+    private EmbeddedDataSource dataSource;
 
     public DataSourceProvider() throws IOException {
         loadProperties();

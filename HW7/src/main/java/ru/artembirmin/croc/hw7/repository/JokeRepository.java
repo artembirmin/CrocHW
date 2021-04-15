@@ -16,19 +16,45 @@ public class JokeRepository implements BaseRepository<Joke> {
      * Имя таблицы.
      */
     private static final String TABLE_NAME = "joke";
+
     /**
      * Максимальный идентификатор.
      */
     private static int maxId;
+
     /**
      * Ресурс.
      */
     private final EmbeddedDataSource dataSource;
+
+    /**
+     * Название столбца с идентификатором.
+     */
     private final String idColName = "id";
+
+    /**
+     * Название столбца с текстом шутки.
+     */
     private final String jokeTextColName = "jokeText";
+
+    /**
+     * Название столбца с количеством слов.
+     */
     private final String wordsCountColName = "wordsCount";
+
+    /**
+     * Название столбца с характеристикой забавности шутки.
+     */
     private final String isFunnyColName = "isFunny";
+
+    /**
+     * Название столбца с датой создания.
+     */
     private final String creationDateColName = "creationDate";
+
+    /**
+     * Название столбца с ресурсом.
+     */
     private final String sourceColName = "source";
 
     /**
@@ -194,12 +220,12 @@ public class JokeRepository implements BaseRepository<Joke> {
                         "CREATE TABLE "
                                 + TABLE_NAME
                                 + " ("
-                                + idColName +" INTEGER, "
-                                + jokeTextColName +" VARCHAR(4096),"
-                                + wordsCountColName +" INTEGER, "
-                                + isFunnyColName +" BOOLEAN,"
-                                + creationDateColName +" DATE,"
-                                + sourceColName +" VARCHAR(256)"
+                                + idColName + " INTEGER, "
+                                + jokeTextColName + " VARCHAR(4096),"
+                                + wordsCountColName + " INTEGER, "
+                                + isFunnyColName + " BOOLEAN,"
+                                + creationDateColName + " DATE,"
+                                + sourceColName + " VARCHAR(256)"
                                 + ")");
                 System.out.println("Table was successfully initialized");
             }
