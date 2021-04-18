@@ -242,7 +242,6 @@ public class JokeRepository implements BaseRepository<Joke> {
      * @return максимальный idColName в базе
      * @throws SQLException если при попытке поиска idColName выбрасывается исключение, метод прокидывает его дальше
      */
-
     private int findMaxId() throws SQLException {
         String sqlQuery = "SELECT MAX(" + idColName + ") FROM " + TABLE_NAME;
         try (Connection connection = dataSource.getConnection();
