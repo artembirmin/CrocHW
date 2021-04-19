@@ -64,5 +64,6 @@ class FlightServiceTest {
                 LocalDate.of(2010, Month.APRIL, 22
                 )
         )));
+
     }
 }

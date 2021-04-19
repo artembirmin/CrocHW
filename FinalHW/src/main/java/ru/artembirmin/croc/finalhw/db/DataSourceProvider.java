@@ -34,7 +34,9 @@ public class DataSourceProvider {
         Properties properties = new Properties();
         try {
             properties.load(
-                    Thread.currentThread().getContextClassLoader().getResourceAsStream("app.properties"));
+                    Thread.currentThread()
+                          .getContextClassLoader()
+                          .getResourceAsStream("app.properties"));
             for (Map.Entry<Object, Object> entry : properties.entrySet()) {
                 this.properties.put((String) entry.getKey(), (String) entry.getValue());
             }

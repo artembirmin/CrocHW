@@ -11,9 +11,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class FlightService implements BaseService<Flight> {
-    private FlightRepository repository;
-    private StringFileWriter fileWriter;
-    private JaxbConverter converter;
+    private final FlightRepository repository;
+    private final StringFileWriter fileWriter;
+    private final JaxbConverter converter;
 
     public FlightService(FlightRepository repository, StringFileWriter fileWriter,
                          JaxbConverter converter) {

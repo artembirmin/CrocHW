@@ -166,8 +166,8 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
                         new Flight(
                                 resultSet.getInt(idColName),
                                 resultSet.getString(flightNumberColName),
-                                new City(resultSet.getString(cityOfArrivalColName)),
                                 new City(resultSet.getString(cityOfDepartureColName)),
+                                new City(resultSet.getString(cityOfArrivalColName)),
                                 resultSet.getDate(dateOfDepartureColName)
                                          .toLocalDate(),
                                 resultSet.getTime(timeOfDepartureColName)

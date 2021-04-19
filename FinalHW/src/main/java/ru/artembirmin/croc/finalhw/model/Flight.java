@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * Авиарейс.
@@ -53,15 +54,6 @@ public class Flight {
     @XmlTransient
     private LocalTime timeOfArrival;
 
-    public Flight(String flightNumber, City departureCity, City arrivalCity, LocalDate dateOfDeparture,
-                  LocalTime timeOfDeparture) {
-        this.flightNumber = flightNumber;
-        this.arrivalCity = arrivalCity;
-        this.departureCity = departureCity;
-        this.dateOfDeparture = dateOfDeparture;
-        this.timeOfDeparture = timeOfDeparture;
-    }
-
     /**
      * @param flightNumber      номер рейса
      * @param departureCityName назвние города вылета
@@ -71,6 +63,24 @@ public class Flight {
      */
     public Flight(String flightNumber, String departureCityName, String arrivalCityName,
                   LocalDate dateOfDeparture, LocalTime timeOfDeparture) {
+        this.flightNumber = flightNumber;
+        this.arrivalCity = new City(arrivalCityName);
+        this.departureCity = new City(departureCityName);
+        this.dateOfDeparture = dateOfDeparture;
+        this.timeOfDeparture = timeOfDeparture;
+    }
+
+    /**
+     * @param id                идентификатор в БД
+     * @param flightNumber      номер рейса
+     * @param departureCityName назвние города вылета
+     * @param arrivalCityName   название города прилета
+     * @param dateOfDeparture   дата вылета
+     * @param timeOfDeparture   время вылета
+     */
+    public Flight(int id, String flightNumber, String departureCityName, String arrivalCityName,
+                  LocalDate dateOfDeparture, LocalTime timeOfDeparture) {
+        this.id = id;
         this.flightNumber = flightNumber;
         this.arrivalCity = new City(arrivalCityName);
         this.departureCity = new City(departureCityName);
@@ -172,5 +182,28 @@ public class Flight {
 
     public void setTimeOfArrival(LocalTime timeOfArrival) {
         this.timeOfArrival = timeOfArrival;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flight flight = (Flight) o;
+        return id == flight.id && Objects.equals(flightNumber, flight.flightNumber) && Objects.equals(
+                departureCity, flight.departureCity) && Objects.equals(arrivalCity,
+                                                                       flight.arrivalCity
+        ) && Objects.equals(dateOfDeparture, flight.dateOfDeparture) && Objects.equals(timeOfDeparture,
+                                                                                       flight.timeOfDeparture
+        ) && Objects.equals(dateOfArrival, flight.dateOfArrival) && Objects.equals(timeOfArrival,
+                                                                                   flight.timeOfArrival
+        );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, flightNumber, departureCity, arrivalCity, dateOfDeparture, timeOfDeparture,
+                            dateOfArrival,
+                            timeOfArrival
+        );
     }
 }
