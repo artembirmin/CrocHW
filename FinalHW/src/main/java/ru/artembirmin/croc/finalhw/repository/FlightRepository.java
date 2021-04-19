@@ -1,17 +1,19 @@
 package ru.artembirmin.croc.finalhw.repository;
 
 import org.apache.derby.jdbc.EmbeddedDataSource;
+import ru.artembirmin.croc.finalhw.db.FlightDBColumnNames;
 import ru.artembirmin.croc.finalhw.model.City;
 import ru.artembirmin.croc.finalhw.model.Flight;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Репозиторий для работы с авиарейсами.
  */
-public class FlightRepository implements BaseRepository<Flight> {
+public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnNames {
 
     /**
      * Имя таблицы.
@@ -27,36 +29,6 @@ public class FlightRepository implements BaseRepository<Flight> {
      * Ресурс данных.
      */
     private final EmbeddedDataSource dataSource;
-
-    /**
-     * Название столбца с идентификатором.
-     */
-    private final String idColName = "id";
-
-    /**
-     * Название столбца с номером рейса.
-     */
-    private final String flightNumberColName = "flightNumber";
-
-    /**
-     * Название столбца с названием города вылета.
-     */
-    private final String cityOfDepartureColName = "cityOfDeparture";
-
-    /**
-     * Название столбца с названием города прилета.
-     */
-    private final String cityOfArrivalColName = "cityOfArrival";
-
-    /**
-     * Название столбца с датой вылета.
-     */
-    private final String dateOfDepartureColName = "dateOfDepartureColName";
-
-    /**
-     * Название столбца с временем вылета.
-     */
-    private final String timeOfDepartureColName = "timeOfDepartureColName";
 
     /**
      * @param dataSource ресурс
@@ -87,6 +59,7 @@ public class FlightRepository implements BaseRepository<Flight> {
             flight.setId(maxId);
         } catch (Exception e) {
             System.out.println("Ошибка выполнения запроса: " + e.getMessage());
+            e.printStackTrace();
         }
         return flight;
     }
@@ -104,31 +77,17 @@ public class FlightRepository implements BaseRepository<Flight> {
         return null;
     }
 
+    public List<Flight> findAllWithCondition(String cityOfDepartureName, String cityOfArrivalName,
+                                             LocalDate dateOfDeparture) {
+        return returningQuery("SELECT * FROM " + TABLE_NAME
+                                      + " WHERE (" + cityOfDepartureColName + " = '" + cityOfDepartureName + "') AND ("
+                                      + cityOfArrivalColName + " = '" + cityOfArrivalName + "') AND ("
+                                      + dateOfDepartureColName + " = '" + dateOfDeparture.toString() + "')");
+    }
+
     @Override
     public List<Flight> findAll() {
-        String sqlQuery = "SELECT * FROM " + TABLE_NAME;
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            ResultSet resultSet = statement.executeQuery();
-            List<Flight> taskList = new ArrayList<>();
-            while (resultSet.next()) {
-                taskList.add(
-                        new Flight(
-                                resultSet.getInt(idColName),
-                                resultSet.getString(flightNumberColName),
-                                new City(resultSet.getString(cityOfArrivalColName)),
-                                new City(resultSet.getString(cityOfDepartureColName)),
-                                resultSet.getDate(dateOfDepartureColName)
-                                         .toLocalDate(),
-                                resultSet.getTime(timeOfDepartureColName)
-                                         .toLocalTime()
-                        ));
-            }
-            return taskList;
-        } catch (Exception e) {
-            System.out.println("Ошибка выполнения запроса: " + e.getMessage());
-        }
-        return new ArrayList<>();
+        return returningQuery("SELECT * FROM " + TABLE_NAME);
     }
 
     @Override
@@ -155,7 +114,7 @@ public class FlightRepository implements BaseRepository<Flight> {
     public void deleteAll() {
         maxId = 0;
         String sqlQuery = "DELETE FROM " + TABLE_NAME;
-        executeSqlCommand(sqlQuery);
+        voidQuery(sqlQuery);
     }
 
     /**
@@ -178,17 +137,48 @@ public class FlightRepository implements BaseRepository<Flight> {
     }
 
     /**
-     * Выполняет запрос sql, результат выполнения которого ничего не возвращает.
+     * Выполняет запрос SQL, результат выполнения которого ничего не возвращает.
      *
      * @param sqlQuery SQL запрос
      */
-    private void executeSqlCommand(String sqlQuery) {
+    private void voidQuery(String sqlQuery) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
             statement.execute();
         } catch (Exception e) {
             System.out.println("Ошибка выполнения запроса: " + e.getMessage());
         }
+    }
+
+    /**
+     * Возвращает результат выполнения SQL запроса. Используется c SELECT в запросе.
+     *
+     * @param sqlQuery SQL запрос
+     * @return результат запроса
+     */
+    private List<Flight> returningQuery(String sqlQuery) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
+            ResultSet resultSet = statement.executeQuery();
+            List<Flight> taskList = new ArrayList<>();
+            while (resultSet.next()) {
+                taskList.add(
+                        new Flight(
+                                resultSet.getInt(idColName),
+                                resultSet.getString(flightNumberColName),
+                                new City(resultSet.getString(cityOfArrivalColName)),
+                                new City(resultSet.getString(cityOfDepartureColName)),
+                                resultSet.getDate(dateOfDepartureColName)
+                                         .toLocalDate(),
+                                resultSet.getTime(timeOfDepartureColName)
+                                         .toLocalTime()
+                        ));
+            }
+            return taskList;
+        } catch (Exception e) {
+            System.out.println("Ошибка выполнения запроса: " + e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     /**

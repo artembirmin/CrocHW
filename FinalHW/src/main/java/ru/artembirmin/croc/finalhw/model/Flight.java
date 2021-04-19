@@ -1,7 +1,10 @@
 package ru.artembirmin.croc.finalhw.model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Авиарейс.
@@ -10,39 +13,48 @@ public class Flight {
     /**
      * Идентификатор в БД.
      */
+    @XmlTransient
     private int id;
     /**
      * Номер рейса.
      */
+    @XmlElement
     private String flightNumber;
     /**
      * Город вылета.
      */
+    @XmlElement
     private City departureCity;
     /**
      * Город прилета.
      */
+    @XmlElement
     private City arrivalCity;
     /**
      * Дата вылета.
      */
+    @XmlElement
     private LocalDate dateOfDeparture;
     /**
      * Время вылета.
      */
+    @XmlElement
     private LocalTime timeOfDeparture;
     /**
      * Дата прилёта.
      * FIXME Возможно, не нужно.
      */
+    @XmlTransient
     private LocalDate dateOfArrival;
     /**
      * Время прилёта.
      * FIXME Возможно, не нужно.
      */
+    @XmlTransient
     private LocalTime timeOfArrival;
 
-    public Flight(String flightNumber, City departureCity, City arrivalCity, LocalDate dateOfDeparture, LocalTime timeOfDeparture) {
+    public Flight(String flightNumber, City departureCity, City arrivalCity, LocalDate dateOfDeparture,
+                  LocalTime timeOfDeparture) {
         this.flightNumber = flightNumber;
         this.arrivalCity = arrivalCity;
         this.departureCity = departureCity;
@@ -51,11 +63,11 @@ public class Flight {
     }
 
     /**
-     * @param flightNumber номер рейса
+     * @param flightNumber      номер рейса
      * @param departureCityName назвние города вылета
-     * @param arrivalCityName название города прилета
-     * @param dateOfDeparture дата вылета
-     * @param timeOfDeparture время вылета
+     * @param arrivalCityName   название города прилета
+     * @param dateOfDeparture   дата вылета
+     * @param timeOfDeparture   время вылета
      */
     public Flight(String flightNumber, String departureCityName, String arrivalCityName,
                   LocalDate dateOfDeparture, LocalTime timeOfDeparture) {
@@ -67,10 +79,10 @@ public class Flight {
     }
 
     /**
-     * @param id идентификатор в БД
-     * @param flightNumber номер
-     * @param departureCity город вылета
-     * @param arrivalCity город прилета
+     * @param id              идентификатор в БД
+     * @param flightNumber    номер
+     * @param departureCity   город вылета
+     * @param arrivalCity     город прилета
      * @param dateOfDeparture дата вылета
      * @param timeOfDeparture время вылета
      */
@@ -130,16 +142,16 @@ public class Flight {
         this.departureCity = departureCity;
     }
 
-    public LocalDate getDateOfDeparture() {
-        return dateOfDeparture;
+    public String getDateOfDeparture() {
+        return dateOfDeparture.format(DateTimeFormatter.ISO_DATE);
     }
 
     public void setDateOfDeparture(LocalDate dateOfDeparture) {
         this.dateOfDeparture = dateOfDeparture;
     }
 
-    public LocalTime getTimeOfDeparture() {
-        return timeOfDeparture;
+    public String getTimeOfDeparture() {
+        return timeOfDeparture.format(DateTimeFormatter.ISO_TIME);
     }
 
     public void setTimeOfDeparture(LocalTime timeOfDeparture) {

@@ -1,9 +1,12 @@
-package ru.artembirmin.croc.finalhw.repository;
+package ru.artembirmin.croc.finalhw.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.artembirmin.croc.finalhw.db.DataSourceProvider;
+import ru.artembirmin.croc.finalhw.file.StringFileWriter;
 import ru.artembirmin.croc.finalhw.model.Flight;
+import ru.artembirmin.croc.finalhw.repository.FlightRepository;
+import ru.artembirmin.croc.finalhw.xml.JaxbConverter;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -14,21 +17,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class FlightRepositoryTest {
+class FlightServiceTest {
     private final int FIRST_POSITION_IN_DB = 1;
     private final int FIRST_POSITION_IN_LIST = 0;
-    private FlightRepository repository = new FlightRepository(new DataSourceProvider().getDataSource());
+    private final FlightService service = new FlightService(
+            new FlightRepository(new DataSourceProvider().getDataSource()), new StringFileWriter(),
+            new JaxbConverter());
     private List<Flight> expectedFlights = new ArrayList<>(Arrays.asList(
 
     ));
 
-    FlightRepositoryTest() throws SQLException, IOException {
+    FlightServiceTest() throws SQLException, IOException {
     }
 
     @BeforeEach
     void setUp() {
-        repository.deleteAll();
-        repository.createNewAll(new ArrayList<>(Arrays.asList(
+        service.deleteAll();
+        service.createNewAll(new ArrayList<>(Arrays.asList(
                 new Flight("123",
                            "Krd",
                            "Msk",
@@ -50,23 +55,14 @@ class FlightRepositoryTest {
         )));
     }
 
-    @Test
-    void createNew() {
-
-        System.out.println(repository.findAll());
-    }
 
     @Test
-    void createNewAll() {
-    }
-
-    @Test
-    void findAllWithCondition() {
-        System.out.println(repository.findAllWithCondition(
+    void convertToXml() {
+        System.out.println(service.convertToXml(service.findAllWithCondition(
                 "Krd",
                 "Msk",
                 LocalDate.of(2010, Month.APRIL, 22
                 )
-        ));
+        )));
     }
 }

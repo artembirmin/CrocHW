@@ -1,5 +1,8 @@
 package ru.artembirmin.croc.finalhw.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  * Город.
  */
@@ -7,6 +10,7 @@ public class City {
     /**
      * Название города.
      */
+    @XmlAttribute
     private final String name;
 
     /**
