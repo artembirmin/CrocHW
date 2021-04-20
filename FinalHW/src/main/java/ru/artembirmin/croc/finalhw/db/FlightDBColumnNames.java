@@ -24,10 +24,15 @@ public interface FlightDBColumnNames {
     /**
      * Название столбца с датой вылета.
      */
-    String dateOfDepartureColName = "dateOfDepartureColName";
+    String dateOfDepartureColName = "dateOfDeparture";
 
     /**
      * Название столбца с временем вылета.
      */
-    String timeOfDepartureColName = "timeOfDepartureColName";
+    String timeOfDepartureColName = "timeOfDeparture";
+
+    /**
+     * Название столбца с временем вылета.
+     */
+    String remarkColName = "remark";
 }

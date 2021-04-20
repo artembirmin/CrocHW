@@ -117,6 +117,7 @@ class FilmsToMembersConverterTest {
         final JaxbConverter jaxbConverter = new JaxbConverter();
         final String xml = jaxbConverter.toXml(converter.convert(filmsListIn));
         Assertions.assertEquals(jaxbConverter.fromXml(expectedOutput, MembersListOut.class),
-                jaxbConverter.fromXml(xml, MembersListOut.class));
+                                jaxbConverter.fromXml(xml, MembersListOut.class)
+        );
     }
 }

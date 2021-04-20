@@ -2,7 +2,6 @@ package ru.artembirmin.croc.finalhw.repository;
 
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import ru.artembirmin.croc.finalhw.db.FlightDBColumnNames;
-import ru.artembirmin.croc.finalhw.model.City;
 import ru.artembirmin.croc.finalhw.model.Flight;
 
 import java.sql.*;
@@ -43,10 +42,17 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
     @Override
     public Flight createNew(Flight flight) {
         String sqlQuery = "INSERT INTO " + TABLE_NAME
-                + " (" + idColName + "," + flightNumberColName + "," + cityOfDepartureColName + "," + cityOfArrivalColName + "," + dateOfDepartureColName + "," + timeOfDepartureColName + ")"
-                + " VALUES (?, ?, ?, ?, ?, ?)";
+                + " (" + idColName + ","
+                + flightNumberColName + ","
+                + cityOfDepartureColName + ","
+                + cityOfArrivalColName + ","
+                + dateOfDepartureColName + ","
+                + timeOfDepartureColName + ","
+                + remarkColName + ")"
+                + " VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
+
             statement.setInt(1, ++maxId);
             statement.setString(2, flight.getFlightNumber());
             statement.setString(3, flight.getDepartureCity()
@@ -55,6 +61,7 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
                                          .getName());
             statement.setDate(5, Date.valueOf(flight.getDateOfDeparture()));
             statement.setTime(6, Time.valueOf(flight.getTimeOfDeparture()));
+            statement.setString(7, flight.getRemark());
             statement.execute();
             flight.setId(maxId);
         } catch (Exception e) {
@@ -72,11 +79,26 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
         return flights;
     }
 
+    /**
+     * Поиск объекта по заданному id.
+     *
+     * @param id идентификатор объекта
+     * @return найденный объект, если объект с этим id существует в единственном экземпляре, иначе null
+     */
     @Override
     public Flight findById(int id) {
-        return null;
+        List<Flight> flights = returningQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + idColName + " = " + id);
+        return flights.size() == 1 ? flights.get(0) : null;
     }
 
+    /**
+     * Поиск всех рейсов с совпадением передаваемых данных. Использует условие WHERE&AND
+     *
+     * @param cityOfDepartureName город вылета
+     * @param cityOfArrivalName   город прилета
+     * @param dateOfDeparture     дата прилеа
+     * @return список найденных рейсов
+     */
     public List<Flight> findAllWithCondition(String cityOfDepartureName, String cityOfArrivalName,
                                              LocalDate dateOfDeparture) {
         return returningQuery("SELECT * FROM " + TABLE_NAME
@@ -91,23 +113,41 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
     }
 
     @Override
-    public Flight save(Flight obj) {
-        return null;
+    public Flight save(Flight flight) {
+        if (isTableContainsId(flight.getId())) {
+            String sqlQuery = "UPDATE " + TABLE_NAME
+                    + " SET " + flightNumberColName + " = '" + flight.getFlightNumber()
+                    + "', " + cityOfDepartureColName + " = '" + flight.getDepartureCity()
+                                                                      .getName()
+                    + "', " + cityOfArrivalColName + " = '" + flight.getArrivalCity()
+                                                                    .getName()
+                    + "', " + dateOfDepartureColName + " = '" + flight.getDateOfDeparture()
+                    + "', " + timeOfDepartureColName + " = '" + flight.getTimeOfDeparture()
+                    + "', " + remarkColName + " = '" + flight.getRemark()
+                    + "' WHERE " + idColName + " = " + flight.getId();
+            voidQuery(sqlQuery);
+        } else {
+            createNew(flight);
+        }
+        return flight;
     }
 
     @Override
-    public List<Flight> saveAll(List<Flight> objects) {
-        return null;
+    public List<Flight> saveAll(List<Flight> flights) {
+        for (Flight flight : flights) {
+            save(flight);
+        }
+        return flights;
     }
 
     @Override
-    public void delete(Flight obj) {
-
+    public void delete(Flight flight) {
+        delete(flight.getId());
     }
 
     @Override
     public void delete(int id) {
-
+        voidQuery("DELETE FROM " + TABLE_NAME + " WHERE " + this.idColName + " = " + id);
     }
 
     @Override
@@ -166,12 +206,14 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
                         new Flight(
                                 resultSet.getInt(idColName),
                                 resultSet.getString(flightNumberColName),
-                                new City(resultSet.getString(cityOfDepartureColName)),
-                                new City(resultSet.getString(cityOfArrivalColName)),
+                                resultSet.getString(cityOfDepartureColName),
+                                resultSet.getString(cityOfArrivalColName),
                                 resultSet.getDate(dateOfDepartureColName)
                                          .toLocalDate(),
                                 resultSet.getTime(timeOfDepartureColName)
-                                         .toLocalTime()
+                                         .toLocalTime(),
+                                resultSet.getString(remarkColName)
+
                         ));
             }
             return taskList;
@@ -179,6 +221,29 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
             System.out.println("Ошибка выполнения запроса: " + e.getMessage());
         }
         return new ArrayList<>();
+    }
+
+    /**
+     * Проверяет, содержится ли передавыемый id в базе.
+     *
+     * @param id передавыемый id
+     * @return true, если содержится
+     */
+    private boolean isTableContainsId(int id) {
+        String sqlQuery = "SELECT " + this.idColName + " FROM " + TABLE_NAME;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                if (resultSet.getInt(this.idColName) == id) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            System.out.println("Ошибка выполнения запроса: " + e.getMessage());
+        }
+        return false;
     }
 
     /**
@@ -205,11 +270,12 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
                                 + TABLE_NAME
                                 + " ("
                                 + idColName + " INTEGER, "
-                                + flightNumberColName + " VARCHAR(50),"
-                                + cityOfDepartureColName + " VARCHAR(70), "
-                                + cityOfArrivalColName + " VARCHAR(70),"
+                                + flightNumberColName + " VARCHAR(10),"
+                                + cityOfDepartureColName + " VARCHAR(100), "
+                                + cityOfArrivalColName + " VARCHAR(100),"
                                 + dateOfDepartureColName + " DATE,"
-                                + timeOfDepartureColName + " TIME"
+                                + timeOfDepartureColName + " TIME, "
+                                + remarkColName + " VARCHAR(50)"
                                 + ")");
                 System.out.println("Table was successfully initialized");
             }
