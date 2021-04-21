@@ -40,13 +40,25 @@ public class Flight {
      * Дата вылета.
      */
     @XmlElement
-    private LocalDate dateOfDeparture;
+    private LocalDate departureDate;
 
     /**
      * Время вылета.
      */
     @XmlElement
-    private LocalTime timeOfDeparture;
+    private LocalTime departureTime;
+
+    /**
+     * Дата прилёта.
+     */
+    @XmlElement
+    private LocalDate arrivalDate;
+
+    /**
+     * Время прилёта.
+     */
+    @XmlElement
+    private LocalTime arrivalTime;
 
     /**
      * Примечание, комментарий к вылету.
@@ -54,93 +66,87 @@ public class Flight {
     @XmlElement
     private String remark = "No status";
 
+
     /**
+     * Конструктор по умолчанию для ковертации в XML.
+     */
+    public Flight() {
+    }
+
+    /**
+     * Рейс без примечаний.
+     *
      * @param flightNumber      номер рейса
      * @param departureCityName назвние города вылета
      * @param arrivalCityName   название города прилета
-     * @param dateOfDeparture   дата вылета
-     * @param timeOfDeparture   время вылета
+     * @param departureDate   дата вылета
+     * @param departureTime   время вылета
+     * @param arrivalDate     дата прилета
+     * @param arrivalTime     время прилета
      */
     public Flight(String flightNumber, String departureCityName, String arrivalCityName,
-                  LocalDate dateOfDeparture, LocalTime timeOfDeparture) {
+                  LocalDate departureDate, LocalTime departureTime,
+                  LocalDate arrivalDate, LocalTime arrivalTime) {
         this.flightNumber = flightNumber;
         this.arrivalCity = new City(arrivalCityName);
         this.departureCity = new City(departureCityName);
-        this.dateOfDeparture = dateOfDeparture;
-        this.timeOfDeparture = timeOfDeparture;
+        this.departureDate = departureDate;
+        this.departureTime = departureTime;
+        this.arrivalDate = arrivalDate;
+        this.arrivalTime = arrivalTime;
     }
 
     /**
-     * @param id              идентификатор в БД
-     * @param flightNumber    номер
-     * @param departureCity   город вылета
-     * @param arrivalCity     город прилета
-     * @param dateOfDeparture дата вылета
-     * @param timeOfDeparture время вылета
-     */
-    public Flight(int id, String flightNumber, City departureCity, City arrivalCity,
-                  LocalDate dateOfDeparture, LocalTime timeOfDeparture) {
-        this.id = id;
-        this.flightNumber = flightNumber;
-        this.arrivalCity = arrivalCity;
-        this.departureCity = departureCity;
-        this.dateOfDeparture = dateOfDeparture;
-        this.timeOfDeparture = timeOfDeparture;
-    }
-
-    /**
+     * Рейс с примечаниями.
+     *
      * @param flightNumber      номер рейса
      * @param departureCityName назвние города вылета
      * @param arrivalCityName   название города прилета
-     * @param dateOfDeparture   дата вылета
-     * @param timeOfDeparture   время вылета
+     * @param departureDate   дата вылета
+     * @param departureTime   время вылета
+     * @param arrivalDate     дата прилета
+     * @param arrivalTime     время прилета
      * @param remark            примечание, комментарий к вылету
      */
     public Flight(String flightNumber, String departureCityName, String arrivalCityName,
-                  LocalDate dateOfDeparture, LocalTime timeOfDeparture, String remark) {
+                  LocalDate departureDate, LocalTime departureTime,
+                  LocalDate arrivalDate, LocalTime arrivalTime,
+                  String remark) {
         this.flightNumber = flightNumber;
         this.arrivalCity = new City(arrivalCityName);
         this.departureCity = new City(departureCityName);
-        this.dateOfDeparture = dateOfDeparture;
-        this.timeOfDeparture = timeOfDeparture;
+        this.departureDate = departureDate;
+        this.departureTime = departureTime;
+        this.arrivalDate = arrivalDate;
+        this.arrivalTime = arrivalTime;
         this.remark = remark;
     }
 
     /**
+     * Рейс с примечанием и id.
+     *
      * @param id                идентификатор в БД
      * @param flightNumber      номер рейса
      * @param departureCityName назвние города вылета
      * @param arrivalCityName   название города прилета
-     * @param dateOfDeparture   дата вылета
-     * @param timeOfDeparture   время вылета
-     */
-    public Flight(int id, String flightNumber, String departureCityName, String arrivalCityName,
-                  LocalDate dateOfDeparture, LocalTime timeOfDeparture) {
-        this.id = id;
-        this.flightNumber = flightNumber;
-        this.arrivalCity = new City(arrivalCityName);
-        this.departureCity = new City(departureCityName);
-        this.dateOfDeparture = dateOfDeparture;
-        this.timeOfDeparture = timeOfDeparture;
-    }
-
-    /**
-     * @param id                идентификатор в БД
-     * @param flightNumber      номер рейса
-     * @param departureCityName назвние города вылета
-     * @param arrivalCityName   название города прилета
-     * @param dateOfDeparture   дата вылета
-     * @param timeOfDeparture   время вылета
+     * @param departureDate   дата вылета
+     * @param departureTime   время вылета
+     * @param arrivalDate     дата прилета
+     * @param arrivalTime     время прилета
      * @param remark            примечание, комментарий к вылету
      */
     public Flight(int id, String flightNumber, String departureCityName, String arrivalCityName,
-                  LocalDate dateOfDeparture, LocalTime timeOfDeparture, String remark) {
+                  LocalDate departureDate, LocalTime departureTime,
+                  LocalDate arrivalDate, LocalTime arrivalTime,
+                  String remark) {
         this.id = id;
         this.flightNumber = flightNumber;
         this.arrivalCity = new City(arrivalCityName);
         this.departureCity = new City(departureCityName);
-        this.dateOfDeparture = dateOfDeparture;
-        this.timeOfDeparture = timeOfDeparture;
+        this.departureDate = departureDate;
+        this.departureTime = departureTime;
+        this.arrivalDate = arrivalDate;
+        this.arrivalTime = arrivalTime;
         this.remark = remark;
     }
 
@@ -176,20 +182,36 @@ public class Flight {
         this.departureCity = departureCity;
     }
 
-    public String getDateOfDeparture() {
-        return dateOfDeparture.format(DateTimeFormatter.ISO_DATE);
+    public String getDepartureDate() {
+        return departureDate.format(DateTimeFormatter.ISO_DATE);
     }
 
-    public void setDateOfDeparture(LocalDate dateOfDeparture) {
-        this.dateOfDeparture = dateOfDeparture;
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
     }
 
-    public String getTimeOfDeparture() {
-        return timeOfDeparture.format(DateTimeFormatter.ISO_TIME);
+    public String getDepartureTime() {
+        return departureTime.format(DateTimeFormatter.ISO_TIME);
     }
 
-    public void setTimeOfDeparture(LocalTime timeOfDeparture) {
-        this.timeOfDeparture = timeOfDeparture;
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public String getArrivalDate() {
+        return arrivalDate.format(DateTimeFormatter.ISO_DATE);
+    }
+
+    public void setArrivalDate(LocalDate arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime.format(DateTimeFormatter.ISO_TIME);
+    }
+
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public String getRemark() {
@@ -202,13 +224,15 @@ public class Flight {
 
     @Override
     public String toString() {
-        return "\nFlight{" +
+        return "Flight{" +
                 "id=" + id +
                 ", flightNumber='" + flightNumber + '\'' +
                 ", departureCity=" + departureCity +
                 ", arrivalCity=" + arrivalCity +
-                ", dateOfDeparture=" + dateOfDeparture +
-                ", timeOfDeparture=" + timeOfDeparture +
+                ", departureDate=" + departureDate +
+                ", departureTime=" + departureTime +
+                ", arrivalDate=" + arrivalDate +
+                ", arrivalTime=" + arrivalTime +
                 ", remark='" + remark + '\'' +
                 '}';
     }
@@ -221,13 +245,17 @@ public class Flight {
         return id == flight.id && Objects.equals(flightNumber, flight.flightNumber) && Objects.equals(
                 departureCity, flight.departureCity) && Objects.equals(arrivalCity,
                                                                        flight.arrivalCity
-        ) && Objects.equals(dateOfDeparture, flight.dateOfDeparture) && Objects.equals(timeOfDeparture,
-                                                                                       flight.timeOfDeparture
+        ) && Objects.equals(departureDate, flight.departureDate) && Objects.equals(departureTime,
+                                                                                   flight.departureTime
+        ) && Objects.equals(arrivalDate, flight.arrivalDate) && Objects.equals(arrivalTime,
+                                                                               flight.arrivalTime
         ) && Objects.equals(remark, flight.remark);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, flightNumber, departureCity, arrivalCity, dateOfDeparture, timeOfDeparture, remark);
+        return Objects.hash(id, flightNumber, departureCity, arrivalCity, departureDate, departureTime, arrivalDate,
+                            arrivalTime, remark
+        );
     }
 }

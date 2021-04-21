@@ -80,4 +80,9 @@ public class FlightService implements BaseService<Flight> {
         }
         return "";
     }
+
+    public void setRemark(String remark, Flight flight) {
+        flight.setRemark(remark);
+        save(flight);
+    }
 }

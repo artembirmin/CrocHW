@@ -11,7 +11,13 @@ public class City {
      * Название города.
      */
     @XmlAttribute
-    private final String name;
+    private String name;
+
+    /**
+     * Конструктор по умолчанию для ковертации в XML.
+     */
+    public City() {
+    }
 
     /**
      * @param name название города

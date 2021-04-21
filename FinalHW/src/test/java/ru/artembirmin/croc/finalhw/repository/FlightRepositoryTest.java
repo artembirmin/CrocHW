@@ -23,7 +23,6 @@ class FlightRepositoryTest {
     private final FlightRepository repository = new FlightRepository(new DataSourceProvider().getDataSource());
     private final FlightsLists flightsLists = new FlightsLists();
 
-
     FlightRepositoryTest() throws SQLException, IOException {
     }
 
@@ -39,7 +38,9 @@ class FlightRepositoryTest {
                                    "Krasnodar",
                                    "Adler",
                                    LocalDate.of(2021, Month.MARCH, 22),
-                                   LocalTime.of(20, 10)
+                                   LocalTime.of(20, 10),
+                                   LocalDate.of(2021, Month.MARCH, 22),
+                                   LocalTime.of(23, 10)
         );
         List<Flight> expectedFlights = flightsLists.getExpectedFlightsForFindAll();
         repository.createNew(flight);
@@ -50,8 +51,12 @@ class FlightRepositoryTest {
 
     @Test
     void createNewAllAndFindAll() {
-        System.out.println(repository.findAll());
+        repository.deleteAll();
+        List<Flight> initialFlights = flightsLists.getInitialFlights();
+        repository.createNewAll(initialFlights);
         assertEquals(flightsLists.getExpectedFlightsForFindAll(), repository.findAll());
+        // Должны быть проставлены id в передаваемом списке
+        assertEquals(flightsLists.getExpectedFlightsForFindAll(), initialFlights);
     }
 
     @Test

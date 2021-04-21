@@ -9,15 +9,18 @@ public class FlightsList {
     @XmlElement(name = "flight")
     private List<Flight> flightList;
 
+    public FlightsList() {
+    }
+
+    public FlightsList(List<Flight> flightList) {
+        this.flightList = flightList;
+    }
+
     public List<Flight> getFlightList() {
         return flightList;
     }
 
     public void setFlightList(List<Flight> flightList) {
-        this.flightList = flightList;
-    }
-
-    public FlightsList(List<Flight> flightList) {
         this.flightList = flightList;
     }
 }

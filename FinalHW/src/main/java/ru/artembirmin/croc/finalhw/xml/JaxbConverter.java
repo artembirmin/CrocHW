@@ -43,6 +43,7 @@ public class JaxbConverter {
         mapper.registerModule(new JaxbAnnotationModule()); // модуль jaxb
         mapper.enable(SerializationFeature.INDENT_OUTPUT); // форматирование вывода
         mapper.setDefaultUseWrapper(false);
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         return mapper;
     }
 }
