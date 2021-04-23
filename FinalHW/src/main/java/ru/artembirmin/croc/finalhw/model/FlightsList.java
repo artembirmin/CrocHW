@@ -9,7 +9,7 @@ public class FlightsList {
     @XmlElement(name = "flight")
     private List<Flight> flightList;
 
-    public FlightsList() {
+    public FlightsList(Flight byId) {
     }
 
     public FlightsList(List<Flight> flightList) {

@@ -1,39 +1,84 @@
 package ru.artembirmin.croc.finalhw.service;
 
+import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.artembirmin.croc.finalhw.FlightsLists;
-import ru.artembirmin.croc.finalhw.db.DataSourceProvider;
-import ru.artembirmin.croc.finalhw.file.StringFileWriter;
+import ru.artembirmin.croc.finalhw.data.db.DataSourceProvider;
+import ru.artembirmin.croc.finalhw.data.xml.JaxbConverter;
 import ru.artembirmin.croc.finalhw.model.Flight;
 import ru.artembirmin.croc.finalhw.model.FlightsList;
 import ru.artembirmin.croc.finalhw.repository.FlightRepository;
-import ru.artembirmin.croc.finalhw.xml.JaxbConverter;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 class FlightServiceTest {
+
+    /**
+     * Номер первого элемента в базе данных.
+     */
     private final int FIRST_POSITION_IN_DB = 1;
+
+    /**
+     * Номер первого элеиента в списке.
+     */
     private final int FIRST_POSITION_IN_LIST = 0;
-    JaxbConverter converter = new JaxbConverter();
+
+    /**
+     * Имя файла в ресурсах, куда произвоидся запись XML.
+     */
+    private final String fileName = "flights.xml";
+
+    /**
+     * Конвертер.
+     */
+    private final JaxbConverter converter = new JaxbConverter();
+
+    /**
+     * Ресурс данныз для БД.
+     */
+    private final EmbeddedDataSource embeddedDataSource = new DataSourceProvider().getDataSource();
+
+    /**
+     * Файл, в который будет производиться запись.
+     */
+    private final File file = new File(getClass().getClassLoader()
+                                                 .getResource(fileName)
+                                                 .getFile());
+
+    /**
+     *
+     * Репозиторий.
+     */
+    private final FlightRepository repository = new FlightRepository(
+            embeddedDataSource,
+            file
+    );
+
+    /**
+     * Сервис.
+     */
     private final FlightService service = new FlightService(
-            new FlightRepository(new DataSourceProvider().getDataSource()), new StringFileWriter(),
+            repository,
             converter
     );
-    private FlightsLists flightsLists = new FlightsLists();
-    private List<Flight> expectedFlights = new ArrayList<>(Arrays.asList(
 
-    ));
+    /**
+     * Списки ожидаемыми и инициализирующими рейсами.
+     */
+    private final FlightsLists flightsLists = new FlightsLists();
 
     FlightServiceTest() throws SQLException, IOException {
     }
@@ -120,7 +165,7 @@ class FlightServiceTest {
     @Test
     void setStatus() {
         Flight flight = service.findById(FIRST_POSITION_IN_DB + 2);
-        service.setRemark("Canceled", flight);
+        service.setRemark(flight, "Canceled");
         List<Flight> expectedFlights = flightsLists.getExpectedFlightsForFindAll();
         expectedFlights.get(FIRST_POSITION_IN_LIST + 2)
                        .setRemark("Canceled");
@@ -144,12 +189,39 @@ class FlightServiceTest {
 
     @Test
     void convertToXml() throws IOException {
-        FlightsList flightsList = new FlightsList(service.findAllWithCondition(
-                "Krasnodar",
-                "Moscow",
-                LocalDate.of(2021, Month.APRIL, 22)
+        FlightsList flightsList = new FlightsList(Collections.singletonList(service.findById(FIRST_POSITION_IN_DB)));
+        assertThat("<flights>\n" +
+                           "  <flight>\n" +
+                           "    <flightNumber>SC 123</flightNumber>\n" +
+                           "    <departureCity name=\"Krasnodar\"/>\n" +
+                           "    <arrivalCity name=\"Moscow\"/>\n" +
+                           "    <departureDate>2021-04-22</departureDate>\n" +
+                           "    <departureTime>12:00:00</departureTime>\n" +
+                           "    <arrivalDate>2021-04-22</arrivalDate>\n" +
+                           "    <arrivalTime>15:00:00</arrivalTime>\n" +
+                           "    <remark>Canceled</remark>\n" +
+                           "  </flight>\n" +
+                           "</flights>\n",
+                   isIdenticalTo(service.convertToXml(flightsList.getFlightList()))
+        );
+    }
+
+    @Test
+    void setRemark() {
+        Flight flight = flightsLists.getExpectedFlightsForFindAll()
+                                    .get(FIRST_POSITION_IN_LIST + 4);
+        flight.setRemark("Collapsed");
+        service.setRemark(flight, "Collapsed");
+        assertEquals(service.findById(FIRST_POSITION_IN_DB + 4), flight);
+    }
+
+    @Test
+    void writeXmlToFile() throws IOException {
+        FlightsList flightsList = new FlightsList(service.findById(
+                FIRST_POSITION_IN_DB
         ));
-        System.out.println(service.convertToXml(flightsList.getFlightList()));
-        //assertEquals(flightsList, converter.fromXml(xml, FlightsList.class));
+        String xml = service.convertToXml(flightsList.getFlightList());
+        service.writeXmlToFile(xml);
+        assertThat(xml, isIdenticalTo(repository.readFromFile()));
     }
 }

@@ -1,4 +1,4 @@
-package ru.artembirmin.croc.finalhw.db;
+package ru.artembirmin.croc.finalhw.data.db;
 
 public interface FlightDBColumnNames {
 

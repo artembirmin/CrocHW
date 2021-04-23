@@ -1,4 +1,4 @@
-package ru.artembirmin.croc.finalhw.xml;
+package ru.artembirmin.croc.finalhw.data.xml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;

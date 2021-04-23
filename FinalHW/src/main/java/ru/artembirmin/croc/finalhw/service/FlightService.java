@@ -1,24 +1,22 @@
 package ru.artembirmin.croc.finalhw.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import ru.artembirmin.croc.finalhw.file.StringFileWriter;
+import ru.artembirmin.croc.finalhw.data.xml.JaxbConverter;
 import ru.artembirmin.croc.finalhw.model.Flight;
 import ru.artembirmin.croc.finalhw.model.FlightsList;
 import ru.artembirmin.croc.finalhw.repository.FlightRepository;
-import ru.artembirmin.croc.finalhw.xml.JaxbConverter;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class FlightService implements BaseService<Flight> {
     private final FlightRepository repository;
-    private final StringFileWriter fileWriter;
     private final JaxbConverter converter;
 
-    public FlightService(FlightRepository repository, StringFileWriter fileWriter,
+    public FlightService(FlightRepository repository,
                          JaxbConverter converter) {
         this.repository = repository;
-        this.fileWriter = fileWriter;
         this.converter = converter;
     }
 
@@ -81,8 +79,25 @@ public class FlightService implements BaseService<Flight> {
         return "";
     }
 
-    public void setRemark(String remark, Flight flight) {
+    public void setRemark(Flight flight, String remark) {
         flight.setRemark(remark);
         save(flight);
+    }
+
+    public void writeXmlToFile(String xml){
+        try {
+            repository.writeToFile(xml);
+        } catch (IOException e) {
+            System.out.println("Ошибка записи в файл: " + e.getMessage());
+        }
+    }
+
+    public String readXmlFromFile(){
+        try {
+            return repository.readFromFile();
+        } catch (IOException e) {
+            System.out.println("Ошибка записи в файл: " + e.getMessage());
+            return "";
+        }
     }
 }

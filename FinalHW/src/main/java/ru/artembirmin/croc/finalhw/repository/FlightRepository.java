@@ -1,9 +1,13 @@
 package ru.artembirmin.croc.finalhw.repository;
 
 import org.apache.derby.jdbc.EmbeddedDataSource;
-import ru.artembirmin.croc.finalhw.db.FlightDBColumnNames;
+import ru.artembirmin.croc.finalhw.data.db.FlightDBColumnNames;
+import ru.artembirmin.croc.finalhw.data.file.ResourcesFileManager;
 import ru.artembirmin.croc.finalhw.model.Flight;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,15 +29,18 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
     private static int maxId;
 
     /**
-     * Ресурс данных.
+     * Ресурс данных для БД.
      */
     private final EmbeddedDataSource dataSource;
+
+    private final ResourcesFileManager resourcesFileManager;
 
     /**
      * @param dataSource ресурс
      * @throws SQLException если во время нахождения maxId произошла ошибка
      */
-    public FlightRepository(EmbeddedDataSource dataSource) throws SQLException {
+    public FlightRepository(EmbeddedDataSource dataSource, File file) throws SQLException {
+        resourcesFileManager = new ResourcesFileManager(file);
         this.dataSource = dataSource;
         initTable();
         maxId = findMaxId();
@@ -161,6 +168,18 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
         maxId = 0;
         String sqlQuery = "DELETE FROM " + TABLE_NAME;
         voidQuery(sqlQuery);
+    }
+
+    public void writeToFile(String str) throws IOException {
+        resourcesFileManager.writeToResources(str);
+    }
+
+    public String readFromFile() throws IOException {
+        return resourcesFileManager.readStringFromFile();
+    }
+
+    public File getFile(){
+        return resourcesFileManager.getCurrentFile();
     }
 
     /**

@@ -3,9 +3,10 @@ package ru.artembirmin.croc.finalhw.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.artembirmin.croc.finalhw.FlightsLists;
-import ru.artembirmin.croc.finalhw.db.DataSourceProvider;
+import ru.artembirmin.croc.finalhw.data.db.DataSourceProvider;
 import ru.artembirmin.croc.finalhw.model.Flight;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,9 +19,35 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FlightRepositoryTest {
+
+    /**
+     * Номер первого элемента в базе данных.
+     */
     private final int FIRST_POSITION_IN_DB = 1;
+
+    /**
+     * Номер первого элеиента в списке.
+     */
     private final int FIRST_POSITION_IN_LIST = 0;
-    private final FlightRepository repository = new FlightRepository(new DataSourceProvider().getDataSource());
+
+    /**
+     * Имя файла в ресурсах, куда произвоидся запись XML.
+     */
+    private final String fileName = "flights.xml";
+
+    /**
+     * Репозиторий.
+     */
+    private final FlightRepository repository = new FlightRepository(
+            new DataSourceProvider().getDataSource(),
+            new File(getClass().getClassLoader()
+                               .getResource(fileName)
+                               .getFile())
+    );
+
+    /**
+     * Списки ожидаемыми и инициализирующими рейсами.
+     */
     private final FlightsLists flightsLists = new FlightsLists();
 
     FlightRepositoryTest() throws SQLException, IOException {
