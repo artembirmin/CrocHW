@@ -2,8 +2,8 @@ package ru.artembirmin.croc.finalhw.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.artembirmin.croc.finalhw.FlightsLists;
 import ru.artembirmin.croc.finalhw.data.db.DataSourceProvider;
+import ru.artembirmin.croc.finalhw.expected.FlightsLists;
 import ru.artembirmin.croc.finalhw.model.Flight;
 
 import java.io.File;

@@ -3,9 +3,9 @@ package ru.artembirmin.croc.finalhw.service;
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.artembirmin.croc.finalhw.FlightsLists;
 import ru.artembirmin.croc.finalhw.data.db.DataSourceProvider;
 import ru.artembirmin.croc.finalhw.data.xml.JaxbConverter;
+import ru.artembirmin.croc.finalhw.expected.FlightsLists;
 import ru.artembirmin.croc.finalhw.model.Flight;
 import ru.artembirmin.croc.finalhw.model.FlightsList;
 import ru.artembirmin.croc.finalhw.repository.FlightRepository;
@@ -59,7 +59,6 @@ class FlightServiceTest {
                                                  .getFile());
 
     /**
-     *
      * Репозиторий.
      */
     private final FlightRepository repository = new FlightRepository(
@@ -188,7 +187,7 @@ class FlightServiceTest {
     }
 
     @Test
-    void convertToXml() throws IOException {
+    void convertToXml() {
         FlightsList flightsList = new FlightsList(Collections.singletonList(service.findById(FIRST_POSITION_IN_DB)));
         assertThat("<flights>\n" +
                            "  <flight>\n" +
@@ -216,12 +215,12 @@ class FlightServiceTest {
     }
 
     @Test
-    void writeXmlToFile() throws IOException {
-        FlightsList flightsList = new FlightsList(service.findById(
+    void writeXmlToFile() {
+        FlightsList flightsList = new FlightsList(Collections.singletonList(service.findById(
                 FIRST_POSITION_IN_DB
-        ));
+        )));
         String xml = service.convertToXml(flightsList.getFlightList());
         service.writeXmlToFile(xml);
-        assertThat(xml, isIdenticalTo(repository.readFromFile()));
+        assertThat(xml, isIdenticalTo(service.readXmlFromFile()));
     }
 }

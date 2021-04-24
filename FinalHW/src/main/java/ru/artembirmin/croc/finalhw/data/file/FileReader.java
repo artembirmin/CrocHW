@@ -1,6 +1,7 @@
 package ru.artembirmin.croc.finalhw.data.file;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 
 public class FileReader {

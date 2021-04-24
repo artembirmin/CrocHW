@@ -5,7 +5,6 @@ import ru.artembirmin.croc.finalhw.data.db.FlightDBColumnNames;
 import ru.artembirmin.croc.finalhw.data.file.ResourcesFileManager;
 import ru.artembirmin.croc.finalhw.model.Flight;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
@@ -33,6 +32,9 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
      */
     private final EmbeddedDataSource dataSource;
 
+    /**
+     * Менеджер файлов в ресурсах.
+     */
     private final ResourcesFileManager resourcesFileManager;
 
     /**
@@ -171,14 +173,14 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
     }
 
     public void writeToFile(String str) throws IOException {
-        resourcesFileManager.writeToResources(str);
+        resourcesFileManager.writeStringToFile(str);
     }
 
     public String readFromFile() throws IOException {
         return resourcesFileManager.readStringFromFile();
     }
 
-    public File getFile(){
+    public File getFile() {
         return resourcesFileManager.getCurrentFile();
     }
 
@@ -286,8 +288,6 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
             ResultSet resultSet = databaseMetadata.getTables(
                     null,
                     null,
-                    // Несмотря на то, что мы создаем таблицу в нижнем регистре (и дальше к ней так же обращаемся),
-                    // поиск мы осуществляем в верхнем. Такие вот приколы
                     TABLE_NAME.toUpperCase(),
                     new String[]{"TABLE"}
             );

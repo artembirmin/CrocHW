@@ -10,10 +10,23 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Сервис для работы с авиарейсами.
+ */
 public class FlightService implements BaseService<Flight> {
+    /**
+     * Репозиторий.
+     */
     private final FlightRepository repository;
+    /**
+     * Конвертер в XML.
+     */
     private final JaxbConverter converter;
 
+    /**
+     * @param repository репозиторий
+     * @param converter  конвертер
+     */
     public FlightService(FlightRepository repository,
                          JaxbConverter converter) {
         this.repository = repository;
@@ -65,11 +78,26 @@ public class FlightService implements BaseService<Flight> {
         return repository.createNewAll(flights);
     }
 
+
+    /**
+     * Поиск всех рейсов с совпадением передаваемых данных. Использует условие WHERE&AND
+     *
+     * @param cityOfDepartureName город вылета
+     * @param cityOfArrivalName   город прилета
+     * @param dateOfDeparture     дата прилеа
+     * @return список найденных рейсов
+     */
     public List<Flight> findAllWithCondition(String cityOfDepartureName, String cityOfArrivalName,
                                              LocalDate dateOfDeparture) {
         return repository.findAllWithCondition(cityOfDepartureName, cityOfArrivalName, dateOfDeparture);
     }
 
+    /**
+     * Конвертирует переданный список рейсов в XML.
+     *
+     * @param flights список рейсов
+     * @return XML, иначе "", в случае ошибки конвертации
+     */
     public String convertToXml(List<Flight> flights) {
         try {
             return converter.toXml(new FlightsList(flights));
@@ -79,12 +107,23 @@ public class FlightService implements BaseService<Flight> {
         return "";
     }
 
+    /**
+     * Сетит примечание переданному рейсу и сохраняет.
+     *
+     * @param flight рейс
+     * @param remark примечание
+     */
     public void setRemark(Flight flight, String remark) {
         flight.setRemark(remark);
         save(flight);
     }
 
-    public void writeXmlToFile(String xml){
+    /**
+     * Записывает XML в файл.
+     *
+     * @param xml XML
+     */
+    public void writeXmlToFile(String xml) {
         try {
             repository.writeToFile(xml);
         } catch (IOException e) {
@@ -92,7 +131,12 @@ public class FlightService implements BaseService<Flight> {
         }
     }
 
-    public String readXmlFromFile(){
+    /**
+     * Читает XML из файла.
+     *
+     * @return XML
+     */
+    public String readXmlFromFile() {
         try {
             return repository.readFromFile();
         } catch (IOException e) {

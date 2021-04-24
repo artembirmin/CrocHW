@@ -66,7 +66,6 @@ public class Flight {
     @XmlElement
     private String remark = "No status";
 
-
     /**
      * Конструктор по умолчанию для ковертации в XML.
      */
@@ -79,10 +78,10 @@ public class Flight {
      * @param flightNumber      номер рейса
      * @param departureCityName назвние города вылета
      * @param arrivalCityName   название города прилета
-     * @param departureDate   дата вылета
-     * @param departureTime   время вылета
-     * @param arrivalDate     дата прилета
-     * @param arrivalTime     время прилета
+     * @param departureDate     дата вылета
+     * @param departureTime     время вылета
+     * @param arrivalDate       дата прилета
+     * @param arrivalTime       время прилета
      */
     public Flight(String flightNumber, String departureCityName, String arrivalCityName,
                   LocalDate departureDate, LocalTime departureTime,
@@ -102,10 +101,10 @@ public class Flight {
      * @param flightNumber      номер рейса
      * @param departureCityName назвние города вылета
      * @param arrivalCityName   название города прилета
-     * @param departureDate   дата вылета
-     * @param departureTime   время вылета
-     * @param arrivalDate     дата прилета
-     * @param arrivalTime     время прилета
+     * @param departureDate     дата вылета
+     * @param departureTime     время вылета
+     * @param arrivalDate       дата прилета
+     * @param arrivalTime       время прилета
      * @param remark            примечание, комментарий к вылету
      */
     public Flight(String flightNumber, String departureCityName, String arrivalCityName,
@@ -129,10 +128,10 @@ public class Flight {
      * @param flightNumber      номер рейса
      * @param departureCityName назвние города вылета
      * @param arrivalCityName   название города прилета
-     * @param departureDate   дата вылета
-     * @param departureTime   время вылета
-     * @param arrivalDate     дата прилета
-     * @param arrivalTime     время прилета
+     * @param departureDate     дата вылета
+     * @param departureTime     время вылета
+     * @param arrivalDate       дата прилета
+     * @param arrivalTime       время прилета
      * @param remark            примечание, комментарий к вылету
      */
     public Flight(int id, String flightNumber, String departureCityName, String arrivalCityName,
@@ -174,12 +173,20 @@ public class Flight {
         this.arrivalCity = arrivalCity;
     }
 
+    public void setArrivalCity(String arrivalCity) {
+        this.arrivalCity = new City(arrivalCity);
+    }
+
     public City getDepartureCity() {
         return departureCity;
     }
 
     public void setDepartureCity(City departureCity) {
         this.departureCity = departureCity;
+    }
+
+    public void setDepartureCity(String departureCityName) {
+        this.departureCity = new City(departureCityName);
     }
 
     public String getDepartureDate() {

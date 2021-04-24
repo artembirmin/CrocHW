@@ -29,10 +29,22 @@ public class ResourcesFileManager {
         fileReader = new FileReader();
     }
 
-    public void writeToResources(String str) throws IOException {
+    /**
+     * Записывает строку в файл.
+     *
+     * @param str записывыемая строка
+     * @throws IOException оишбка при взаимодействии с файлом
+     */
+    public void writeStringToFile(String str) throws IOException {
         fileWriter.write(str, currentFile);
     }
 
+    /**
+     * Считывает содержимое файла в виде строки.
+     *
+     * @return считанная строка
+     * @throws IOException оишбка при взаимодействии с файлом
+     */
     public String readStringFromFile() throws IOException {
         return fileReader.readString(currentFile);
     }
