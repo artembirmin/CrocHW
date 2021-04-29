@@ -1,13 +1,13 @@
-package ru.artembirmin.croc.finalhw.service;
+package ru.artembirmin.croc.finalhw.service.db;
 
 import java.util.List;
 
 /**
- * Необходимо реализовать для возможности совершения операций записи и получения объектов.
+ * Интерфейс сервиса соверщающего CRUD-операции над объектом.
  *
- * @param <T> тип, с которым будет работать сервис
+ * @param <T> тип объекта
  */
-public interface BaseService<T> {
+public interface DatabaseService<T> {
 
     /**
      * Поиск объекта по заданному id.

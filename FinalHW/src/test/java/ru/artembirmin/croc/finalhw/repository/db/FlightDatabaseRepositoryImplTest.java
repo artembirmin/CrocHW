@@ -1,12 +1,10 @@
-package ru.artembirmin.croc.finalhw.repository;
+package ru.artembirmin.croc.finalhw.repository.db;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.artembirmin.croc.finalhw.data.db.DataSourceProvider;
-import ru.artembirmin.croc.finalhw.expected.FlightsLists;
+import ru.artembirmin.croc.finalhw.BaseFlightTest;
 import ru.artembirmin.croc.finalhw.model.Flight;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,45 +16,22 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FlightRepositoryTest {
+class FlightDatabaseRepositoryImplTest extends BaseFlightTest {
 
     /**
-     * Номер первого элемента в базе данных.
+     * Репозиторий по работе с базой.
      */
-    private final int FIRST_POSITION_IN_DB = 1;
-
-    /**
-     * Номер первого элеиента в списке.
-     */
-    private final int FIRST_POSITION_IN_LIST = 0;
-
-    /**
-     * Имя файла в ресурсах, куда произвоидся запись XML.
-     */
-    private final String fileName = "flights.xml";
-
-    /**
-     * Репозиторий.
-     */
-    private final FlightRepository repository = new FlightRepository(
-            new DataSourceProvider().getDataSource(),
-            new File(getClass().getClassLoader()
-                               .getResource(fileName)
-                               .getFile())
+    protected final FlightDatabaseRepositoryImpl databaseRepository = new FlightDatabaseRepositoryImpl(
+            embeddedDataSource
     );
 
-    /**
-     * Списки ожидаемыми и инициализирующими рейсами.
-     */
-    private final FlightsLists flightsLists = new FlightsLists();
-
-    FlightRepositoryTest() throws SQLException, IOException {
+    public FlightDatabaseRepositoryImplTest() throws IOException, SQLException {
     }
 
     @BeforeEach
     void setUp() {
-        repository.deleteAll();
-        repository.createNewAll(flightsLists.getInitialFlights());
+        databaseRepository.deleteAll();
+        databaseRepository.createNewAll(flightsLists.getInitialFlights());
     }
 
     @Test
@@ -70,18 +45,18 @@ class FlightRepositoryTest {
                                    LocalTime.of(23, 10)
         );
         List<Flight> expectedFlights = flightsLists.getExpectedFlightsForFindAll();
-        repository.createNew(flight);
+        databaseRepository.createNew(flight);
         flight.setId(9);
         expectedFlights.add(flight);
-        assertEquals(expectedFlights, repository.findAll());
+        assertEquals(expectedFlights, databaseRepository.findAll());
     }
 
     @Test
     void createNewAllAndFindAll() {
-        repository.deleteAll();
+        databaseRepository.deleteAll();
         List<Flight> initialFlights = flightsLists.getInitialFlights();
-        repository.createNewAll(initialFlights);
-        assertEquals(flightsLists.getExpectedFlightsForFindAll(), repository.findAll());
+        databaseRepository.createNewAll(initialFlights);
+        assertEquals(flightsLists.getExpectedFlightsForFindAll(), databaseRepository.findAll());
         // Должны быть проставлены id в передаваемом списке
         assertEquals(flightsLists.getExpectedFlightsForFindAll(), initialFlights);
     }
@@ -90,13 +65,13 @@ class FlightRepositoryTest {
     void findById() {
         assertEquals(flightsLists.getExpectedFlightsForFindAll()
                                  .get(FIRST_POSITION_IN_LIST + 3),
-                     repository.findById(FIRST_POSITION_IN_DB + 3)
+                     databaseRepository.findById(FIRST_POSITION_IN_DB + 3)
         );
     }
 
     @Test
     void findAllWithCondition() {
-        assertEquals(flightsLists.getExpectedFlightsForCondition(), repository.findAllWithCondition(
+        assertEquals(flightsLists.getExpectedFlightsForCondition(), databaseRepository.findAllWithCondition(
                 "Krasnodar",
                 "Moscow",
                 LocalDate.of(2021, Month.APRIL, 22
@@ -109,8 +84,8 @@ class FlightRepositoryTest {
         Flight flight = flightsLists.getExpectedFlightsForFindAll()
                                     .get(FIRST_POSITION_IN_LIST + 4);
         flight.setRemark("Collapsed");
-        repository.save(flight);
-        assertEquals(repository.findById(FIRST_POSITION_IN_DB + 4), flight);
+        databaseRepository.save(flight);
+        assertEquals(databaseRepository.findById(FIRST_POSITION_IN_DB + 4), flight);
     }
 
     @Test
@@ -118,32 +93,32 @@ class FlightRepositoryTest {
         Flight flight4 = flightsLists.getExpectedFlightsForFindAll()
                                      .get(FIRST_POSITION_IN_LIST + 4);
         flight4.setRemark("Collapsed");
-        repository.save(flight4);
+        databaseRepository.save(flight4);
         Flight flight6 = flightsLists.getExpectedFlightsForFindAll()
                                      .get(FIRST_POSITION_IN_LIST + 6);
         flight6.setRemark("Collapsed");
-        repository.save(flight6);
+        databaseRepository.save(flight6);
 
         List<Flight> expectedFlights = flightsLists.getExpectedFlightsForFindAll();
         expectedFlights.set(FIRST_POSITION_IN_LIST + 4, flight4);
         expectedFlights.set(FIRST_POSITION_IN_LIST + 6, flight6);
 
-        repository.saveAll(Arrays.asList(flight4, flight6));
-        assertEquals(expectedFlights, repository.findAll());
+        databaseRepository.saveAll(Arrays.asList(flight4, flight6));
+        assertEquals(expectedFlights, databaseRepository.findAll());
     }
 
     @Test
     void delete() {
-        repository.delete(flightsLists.getExpectedFlightsForFindAll()
-                                      .get(FIRST_POSITION_IN_LIST + 2));
+        databaseRepository.delete(flightsLists.getExpectedFlightsForFindAll()
+                                              .get(FIRST_POSITION_IN_LIST + 2));
         List<Flight> expectedFlights = flightsLists.getExpectedFlightsForFindAll();
         expectedFlights.remove(FIRST_POSITION_IN_LIST + 2);
-        assertEquals(expectedFlights, repository.findAll());
+        assertEquals(expectedFlights, databaseRepository.findAll());
     }
 
     @Test
     void deleteAll() {
-        repository.deleteAll();
-        assertEquals(Collections.emptyList(), repository.findAll());
+        databaseRepository.deleteAll();
+        assertEquals(Collections.emptyList(), databaseRepository.findAll());
     }
 }

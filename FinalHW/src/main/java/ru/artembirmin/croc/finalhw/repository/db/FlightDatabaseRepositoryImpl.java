@@ -1,12 +1,9 @@
-package ru.artembirmin.croc.finalhw.repository;
+package ru.artembirmin.croc.finalhw.repository.db;
 
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import ru.artembirmin.croc.finalhw.data.db.FlightDBColumnNames;
-import ru.artembirmin.croc.finalhw.data.file.ResourcesFileManager;
 import ru.artembirmin.croc.finalhw.model.Flight;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,12 +12,7 @@ import java.util.List;
 /**
  * Репозиторий для работы с авиарейсами.
  */
-public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnNames {
-
-    /**
-     * Имя таблицы.
-     */
-    private static final String TABLE_NAME = "flight";
+public class FlightDatabaseRepositoryImpl implements FlightDatabaseRepository, FlightDBColumnNames {
 
     /**
      * Максимальный идентификатор.
@@ -33,16 +25,10 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
     private final EmbeddedDataSource dataSource;
 
     /**
-     * Менеджер файлов в ресурсах.
-     */
-    private final ResourcesFileManager resourcesFileManager;
-
-    /**
      * @param dataSource ресурс
      * @throws SQLException если во время нахождения maxId произошла ошибка
      */
-    public FlightRepository(EmbeddedDataSource dataSource, File file) throws SQLException {
-        resourcesFileManager = new ResourcesFileManager(file);
+    public FlightDatabaseRepositoryImpl(EmbeddedDataSource dataSource) throws SQLException {
         this.dataSource = dataSource;
         initTable();
         maxId = findMaxId();
@@ -50,7 +36,7 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
 
     @Override
     public Flight createNew(Flight flight) {
-        String sqlQuery = "INSERT INTO " + TABLE_NAME
+        String sqlQuery = "INSERT INTO " + FlightDatabaseRepository.TABLE_NAME
                 + " (" + ID_COL_NAME + ","
                 + FLIGHT_NUMBER_COL_NAME + ","
                 + DEPARTURE_CITY_COL_NAME + ","
@@ -100,21 +86,15 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
      */
     @Override
     public Flight findById(int id) {
-        List<Flight> flights = returningQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + ID_COL_NAME + " = " + id);
+        List<Flight> flights = returningQuery(
+                "SELECT * FROM " + FlightDatabaseRepository.TABLE_NAME + " WHERE " + ID_COL_NAME + " = " + id);
         return flights.size() == 1 ? flights.get(0) : null;
     }
 
-    /**
-     * Поиск всех рейсов с совпадением передаваемых данных. Использует условие WHERE&AND
-     *
-     * @param cityOfDepartureName город вылета
-     * @param cityOfArrivalName   город прилета
-     * @param dateOfDeparture     дата прилеа
-     * @return список найденных рейсов
-     */
+    @Override
     public List<Flight> findAllWithCondition(String cityOfDepartureName, String cityOfArrivalName,
                                              LocalDate dateOfDeparture) {
-        return returningQuery("SELECT * FROM " + TABLE_NAME
+        return returningQuery("SELECT * FROM " + FlightDatabaseRepository.TABLE_NAME
                                       + " WHERE (" + DEPARTURE_CITY_COL_NAME + " = '" + cityOfDepartureName + "') AND ("
                                       + ARRIVAL_CITY_COL_NAME + " = '" + cityOfArrivalName + "') AND ("
                                       + DEPARTURE_DATE_COL_NAME + " = '" + dateOfDeparture.toString() + "')");
@@ -122,13 +102,13 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
 
     @Override
     public List<Flight> findAll() {
-        return returningQuery("SELECT * FROM " + TABLE_NAME);
+        return returningQuery("SELECT * FROM " + FlightDatabaseRepository.TABLE_NAME);
     }
 
     @Override
     public Flight save(Flight flight) {
         if (isTableContainsId(flight.getId())) {
-            String sqlQuery = "UPDATE " + TABLE_NAME
+            String sqlQuery = "UPDATE " + FlightDatabaseRepository.TABLE_NAME
                     + " SET " + FLIGHT_NUMBER_COL_NAME + " = '" + flight.getFlightNumber()
                     + "', " + DEPARTURE_CITY_COL_NAME + " = '" + flight.getDepartureCity()
                                                                        .getName()
@@ -162,26 +142,14 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
 
     @Override
     public void delete(int id) {
-        voidQuery("DELETE FROM " + TABLE_NAME + " WHERE " + this.ID_COL_NAME + " = " + id);
+        voidQuery("DELETE FROM " + FlightDatabaseRepository.TABLE_NAME + " WHERE " + this.ID_COL_NAME + " = " + id);
     }
 
     @Override
     public void deleteAll() {
         maxId = 0;
-        String sqlQuery = "DELETE FROM " + TABLE_NAME;
+        String sqlQuery = "DELETE FROM " + FlightDatabaseRepository.TABLE_NAME;
         voidQuery(sqlQuery);
-    }
-
-    public void writeToFile(String str) throws IOException {
-        resourcesFileManager.writeStringToFile(str);
-    }
-
-    public String readFromFile() throws IOException {
-        return resourcesFileManager.readStringFromFile();
-    }
-
-    public File getFile() {
-        return resourcesFileManager.getCurrentFile();
     }
 
     /**
@@ -191,7 +159,7 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
      * @throws SQLException если при попытке поиска idColName выбрасывается исключение, метод прокидывает его дальше
      */
     private int findMaxId() throws SQLException {
-        String sqlQuery = "SELECT MAX(" + ID_COL_NAME + ") FROM " + TABLE_NAME;
+        String sqlQuery = "SELECT MAX(" + ID_COL_NAME + ") FROM " + FlightDatabaseRepository.TABLE_NAME;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
             ResultSet resultSet = statement.executeQuery();
@@ -261,7 +229,7 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
      * @return true, если содержится
      */
     private boolean isTableContainsId(int id) {
-        String sqlQuery = "SELECT " + this.ID_COL_NAME + " FROM " + TABLE_NAME;
+        String sqlQuery = "SELECT " + this.ID_COL_NAME + " FROM " + FlightDatabaseRepository.TABLE_NAME;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
             ResultSet resultSet = statement.executeQuery();
@@ -281,14 +249,14 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
      * Метод инициализации БД.
      */
     private void initTable() {
-        System.out.println(String.format("Start initializing %s table", TABLE_NAME));
+        System.out.println(String.format("Start initializing %s table", FlightDatabaseRepository.TABLE_NAME));
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             DatabaseMetaData databaseMetadata = connection.getMetaData();
             ResultSet resultSet = databaseMetadata.getTables(
                     null,
                     null,
-                    TABLE_NAME.toUpperCase(),
+                    FlightDatabaseRepository.TABLE_NAME.toUpperCase(),
                     new String[]{"TABLE"}
             );
             if (resultSet.next()) {
@@ -296,7 +264,7 @@ public class FlightRepository implements BaseRepository<Flight>, FlightDBColumnN
             } else {
                 statement.executeUpdate(
                         "CREATE TABLE "
-                                + TABLE_NAME
+                                + FlightDatabaseRepository.TABLE_NAME
                                 + " ("
                                 + ID_COL_NAME + " INTEGER, "
                                 + FLIGHT_NUMBER_COL_NAME + " VARCHAR(10),"

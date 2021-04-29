@@ -1,14 +1,13 @@
-package ru.artembirmin.croc.finalhw.repository;
+package ru.artembirmin.croc.finalhw.repository.db;
 
 import java.util.List;
-
 
 /**
  * Необходимо реализовать для возможности совершения CRUD-операций над объектом.
  *
  * @param <T> тип, с которым будет работать репозиторий
  */
-public interface BaseRepository<T> {
+public interface DatabaseRepository<T> {
 
     /**
      * Поиск объекта по заданному id.

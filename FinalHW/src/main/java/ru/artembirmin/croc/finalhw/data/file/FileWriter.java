@@ -20,7 +20,7 @@ public class FileWriter {
     public void write(String str, File file) throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream);
-        writer.write(str, 0, str.length() - 1);
+        writer.write(str, 0, str.length());
         writer.close();
     }
 }
